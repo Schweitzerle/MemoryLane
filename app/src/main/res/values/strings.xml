@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">MemoryLane</string>
+    <string name="nav_newlyweds">Home</string>
+    <string name="nav_wedding_guests">Gäste</string>
+    <string name="nav_gallery">Fotoalbum</string>
+    <string name="newly_weds_fragment_headline">Das Brautpaar...</string>
+    <string name="groom_name">Patrick</string>
+    <string name="bride_name">Janine</string>
+    <string name="sur_name">Schiele</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="dialog_title">Entfernen…</string>
+    <string name="dialog_description">Möchten Sie diesen Tagebucheintrag entfernen? Ihre Bilder bleiben bestehen.</string>
+    <string name="dialog_negative_button_text">Nein</string>
+    <string name="dialog_positive_button_text">Ja</string>
+    <string name="dialog_positive_button_toast">Erfolgreich entfernt!</string>
+    <string name="dialog_tag">Entfernen</string>
+    <string name="init_gallery_picture_error_message">Es gibt noch unausgefüllte Felder…</string>
+    <string name="nav_my_guestbooks_string">Erstellte Gastbücher</string>
+    <string name="nav_member_string">Teilnehmende Gastbücher</string>
+    <string name="nav_browse_guestbooks">Endecken</string>
+    <string name="nav_guestbooks">Gästebücher</string>
+    <string name="nav_profile">Profil</string>
+
+    <string-array name="picture_sources">
+        <item>Camera</item>
+        <item>Gallery</item>
+    </string-array>
+
+
+</resources>

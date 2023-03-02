@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+    android:id="@+id/nav_guests"
+    android:icon="@drawable/ic_baseline_groups_24"
+    android:title="@string/nav_wedding_guests"
+    />
+
+    <item
+        android:id="@+id/nav_newlyweds"
+        android:icon="@drawable/ic_baseline_heart_broken_24"
+        android:title="@string/nav_newlyweds"/>
+
+    <item
+        android:id="@+id/nav_gallery"
+        android:icon="@drawable/ic_baseline_photo_album_24"
+        android:title="@string/nav_gallery"
+        />
+</menu>
