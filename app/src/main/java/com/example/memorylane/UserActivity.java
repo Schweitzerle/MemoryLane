@@ -22,7 +22,7 @@ import androidx.fragment.app.DialogFragment;
 
 import com.bumptech.glide.Glide;
 import com.example.memorylane.Database.FirebaseDatabaseInstance;
-import com.example.memorylane.Database.User;
+import com.example.memorylane.Classes.User;
 import com.example.memorylane.Database.UserSession;
 import com.example.memorylane.FragmentsMain.SignaturePadFragment;
 import com.google.android.material.button.MaterialButton;

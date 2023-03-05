@@ -27,13 +27,6 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".GuestEntryDetailActivity"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
             android:name=".GuestbookCreationActivity"
             android:exported="false">
             <meta-data
@@ -61,9 +54,6 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-        <activity
-            android:name=".PictureDetailActivity"
-            android:exported="false" />
         <activity
             android:name=".PictureInitActivity"
             android:exported="false" />

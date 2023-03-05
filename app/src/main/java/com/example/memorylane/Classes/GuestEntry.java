@@ -1,11 +1,8 @@
 package com.example.memorylane.Classes;
 
-import com.example.memorylane.Database.User;
-
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 public class GuestEntry implements Serializable {
     public String pictureURL;

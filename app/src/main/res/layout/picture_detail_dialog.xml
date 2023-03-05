@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/constraint_layout"
+    android:background="@color/transparent"
+    android:gravity="center"
+   >
+
+    <com.wajahatkarim3.easyflipview.EasyFlipView
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="match_parent"
+        android:background="@drawable/cork"
+        android:layout_height="400dp"
+        app:flipOnTouch="true"
+        app:flipEnabled="true"
+        app:flipDuration="400"
+        app:flipFrom="right"
+        app:flipType="horizontal"
+        app:autoFlipBack="false"
+        >
+
+        <!-- Back Layout Goes Here -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/polaroid"
+            app:cardCornerRadius="20dp"
+            app:cardElevation="50dp"
+            >
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="60dp"
+                android:layout_marginStart="40dp"
+                android:layout_marginEnd="50dp"
+                android:layout_marginBottom="40dp"
+                android:id="@+id/conn"
+                >
+
+                <TextView
+                    android:id="@+id/gallery_image_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginHorizontal="10sp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="30sp"
+                    android:padding="10dp"
+                    android:rotation="-10"
+                    android:textSize="30sp"
+                    android:fontFamily="@font/zeyada"
+                    app:layout_constraintBottom_toTopOf="@id/signature"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/signature"
+                        android:padding="5dp"
+                        android:layout_width="100dp"
+                        android:layout_height="50dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:background="@color/white"
+                        />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </RelativeLayout>
+
+
+
+
+        <!-- Front Layout Goes Here -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:cardCornerRadius="20dp"
+            android:background="@drawable/polaroid"
+            app:cardElevation="50dp"
+            >
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/gallery_image_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="60dp"
+                android:layout_marginStart="40dp"
+                android:layout_marginEnd="50dp"
+                android:layout_marginBottom="90dp"
+                tools:srcCompat="@tools:sample/avatars" />
+
+        </RelativeLayout>
+
+
+
+
+    </com.wajahatkarim3.easyflipview.EasyFlipView>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</RelativeLayout>

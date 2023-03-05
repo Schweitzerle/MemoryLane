@@ -1,11 +1,16 @@
 package com.example.memorylane.Adapters;
 
+import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,9 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.memorylane.Classes.GuestEntry;
 import com.example.memorylane.Database.FirebaseDatabaseInstance;
-import com.example.memorylane.Database.User;
-import com.example.memorylane.GuestEntryDetailActivity;
-import com.example.memorylane.PictureDetailActivity;
+import com.example.memorylane.Classes.User;
 import com.example.memorylane.R;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.textview.MaterialTextView;
@@ -50,9 +53,59 @@ public class GuestEntryAdapter extends RecyclerView.Adapter<GuestEntryAdapter.Vi
         holder.bind(guestEntry);
 
         holder.itemView.setOnClickListener(v -> {
-            Intent intent = new Intent(v.getContext(), GuestEntryDetailActivity.class);
-            intent.putExtra(GuestEntryDetailActivity.KEY_GUEST_ENTRY, guestEntry);
-            v.getContext().startActivity(intent);
+            Dialog dialog = new Dialog(context);
+            dialog.setContentView(R.layout.entry_detail_dialog);
+            dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            loadUI(dialog, guestEntry);
+            dialog.show();
+        });
+    }
+
+    private void loadUI(Dialog dialog, GuestEntry guestEntry) {
+        ShapeableImageView signatureImage = dialog.findViewById(R.id.signature);
+        ImageView imageView = dialog.findViewById(R.id.guestbook_image);
+        TextView age = dialog.findViewById(R.id.age);
+        TextView name = dialog.findViewById(R.id.guest_name);
+        TextView entryText = dialog.findViewById(R.id.entryText);
+        entryText.setText(guestEntry.getDescription());
+        loadSignature(guestEntry.getUserID(), signatureImage);
+        DatabaseReference userRef = FirebaseDatabaseInstance.getInstance().getFirebaseDatabase().getReference("Users");
+        userRef.child(guestEntry.getUserID()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.getValue(User.class);
+                name.setText(user.getUsername());
+                age.setText(String.valueOf(user.getAge()));
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Handle error
+            }
+        });
+
+
+        Glide.with(context).load(guestEntry.getPictureURL()).into(imageView);
+    }
+
+    private void loadSignature(String userID, ShapeableImageView signatureImage) {
+        DatabaseReference signatureRef = FirebaseDatabaseInstance.getInstance().getFirebaseDatabase().getReference("Users").child(userID).child("signatureUrl");
+        signatureRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String signature = dataSnapshot.getValue(String.class);
+                if (signature!= null) {
+                    byte[] decodedString = Base64.decode(signature, Base64.DEFAULT);
+                    Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                    // set the signature to the ImageView
+                    signatureImage.setImageBitmap(decodedByte);
+
+                }
+
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Handle error
+            }
         });
     }
 

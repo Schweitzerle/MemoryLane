@@ -18,13 +18,9 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
-import com.example.memorylane.Adapters.ImageAdapter;
 import com.example.memorylane.Classes.GuestEntry;
-import com.example.memorylane.Classes.Guestbook;
-import com.example.memorylane.Classes.UploadedPicture;
 import com.example.memorylane.Database.FirebaseDatabaseInstance;
 import com.example.memorylane.Database.FirebaseStorageInstance;
-import com.example.memorylane.Database.User;
 import com.example.memorylane.Database.UserSession;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -32,18 +28,12 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 public class GuestEntryCreationActivity extends AppCompatActivity {

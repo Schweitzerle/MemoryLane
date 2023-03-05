@@ -20,4 +20,7 @@
     <color name="orange_op">#99FF4805</color>
     <color name="grey">#403f3f</color>
     <color name="white_op">#99FFFFFF</color>
+    <color name="transparent">#00FFFFFF</color>
+    <color name="brown">#5e2812</color>
+    <color name="light_brown">#7a2401</color>
 </resources>
