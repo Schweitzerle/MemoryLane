@@ -9,19 +9,21 @@ public class Guestbook {
     public String pictureUrl;
     public String description;
     public String creatorId;
+    public String date;
     public boolean isPublic;
 
     public Guestbook() {
         // Default constructor required for calls to DataSnapshot.getValue(Guestbook.class)
     }
 
-    public Guestbook(String id, String name, String pictureUrl, String description, String creatorId, boolean isPublic) {
+    public Guestbook(String id, String name, String pictureUrl, String description, String creatorId, String date, boolean isPublic) {
         this.id = id;
         this.name = name;
         this.pictureUrl = pictureUrl;
         this.description = description;
         this.creatorId = creatorId;
         this.isPublic = isPublic;
+        this.date = date;
     }
 
     public Map<String, Object> toMap() {
@@ -32,7 +34,16 @@ public class Guestbook {
         result.put("description", description);
         result.put("creatorId", creatorId);
         result.put("isPublic", isPublic);
+        result.put("date", date);
         return result;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 
     public String getName() {

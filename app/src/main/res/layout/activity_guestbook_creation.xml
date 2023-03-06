@@ -30,12 +30,28 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:adjustViewBounds="true"
+        android:layout_marginStart="20dp"
         android:contentDescription="Gästebuch Bild"
         android:scaleType="centerCrop"
         android:src="@drawable/brautpaar"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/date"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/register_text" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/date"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:backgroundTint="@color/light_red"
+        android:text="Datum deiner Veranstaltung"
+        android:layout_marginHorizontal="20dp"
+        android:padding="10dp"
+        app:layout_constraintStart_toEndOf="@id/guestbook_picture_input"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/guestbook_picture_input"
+        app:layout_constraintTop_toTopOf="@id/guestbook_picture_input"
+        />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/text_input_layout_name"
