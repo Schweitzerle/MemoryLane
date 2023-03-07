@@ -9,11 +9,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.memorylane.Classes.DeleteDialogEntry;
+import com.example.memorylane.Classes.DeleteDialogPicture;
 import com.example.memorylane.Classes.UploadedPicture;
 import com.example.memorylane.Database.FirebaseDatabaseInstance;
 import com.example.memorylane.Database.UserSession;
@@ -51,14 +55,23 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
         holder.bind(uploadedPicture);
 
         holder.itemView.setOnClickListener(v -> {
-
             Dialog dialog = new Dialog(context);
             dialog.setContentView(R.layout.picture_detail_dialog);
             dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             loadUI(dialog, uploadedPicture);
-
-
             dialog.show();
+        });
+
+
+        holder.itemView.setOnLongClickListener(v -> {
+            if (UserSession.getInstance().getCurrentUser().getUid().equals(uploadedPicture.getUploaderID())) {
+                DeleteDialogPicture deleteDialogPicture = new DeleteDialogPicture(context, uploadedPicture);
+                deleteDialogPicture.show(((AppCompatActivity) context).getSupportFragmentManager(), "Entfernen");
+                return false;
+            } else Toast.makeText(context, "Nur eigene Bilder sind bearbeitbar", Toast.LENGTH_SHORT).show();
+
+            return true;
+
         });
     }
 

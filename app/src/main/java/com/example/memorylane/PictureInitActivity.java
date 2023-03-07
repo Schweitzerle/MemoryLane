@@ -130,6 +130,7 @@ public class PictureInitActivity extends AppCompatActivity {
                     public void onSuccess(Uri uri) {
                         // Create a new entry for the picture in the real-time database
                         UploadedPicture uploadedPictureWithUrl = new UploadedPicture(uri.toString(), uploadedPicture.getDescription(), UserSession.getInstance().getCurrentUser().getUid());
+                        uploadedPictureWithUrl.setId(uploadedPicture.getId());
                         databaseReference.child(uploadedPictureWithUrl.getId()).setValue(uploadedPictureWithUrl);
                     }
                 });

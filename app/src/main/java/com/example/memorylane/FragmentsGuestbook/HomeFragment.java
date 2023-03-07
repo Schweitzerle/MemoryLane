@@ -1,7 +1,9 @@
 package com.example.memorylane.FragmentsGuestbook;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +22,7 @@ import com.example.memorylane.Classes.Guestbook;
 import com.example.memorylane.Classes.SliderItem;
 import com.example.memorylane.Classes.UploadedPicture;
 import com.example.memorylane.Database.FirebaseDatabaseInstance;
+import com.example.memorylane.Database.UserSession;
 import com.example.memorylane.GuestbookActivity;
 import com.example.memorylane.R;
 import com.google.android.material.imageview.ShapeableImageView;
@@ -45,6 +48,7 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         View fragmentView = inflater.inflate(R.layout.fragment_home, container, false);
         initUI(fragmentView);
         return fragmentView;
@@ -61,6 +65,7 @@ public class HomeFragment extends Fragment {
         iniCardView();
         initImageList(fragmentView);
 
+        Log.d("User", UserSession.getInstance().getCurrentUser().getUid() );
 
     }
 
@@ -71,10 +76,14 @@ public class HomeFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Guestbook guestbook = snapshot.getValue(Guestbook.class);
                 if (guestbook != null) {
-                    guestbookName.setText(guestbook.getName());
-                    guestBookDescription.setText(guestbook.getDescription());
-                    date.setText(guestbook.getDate());
-                    Glide.with(requireContext()).load(guestbook.getPictureUrl()).into(guestBookImage);
+                    Activity activity = getActivity();
+                    if (isAdded() && activity != null) {
+                        guestbookName.setText(guestbook.getName());
+                        guestBookDescription.setText(guestbook.getDescription());
+                        date.setText(guestbook.getDate());
+                        Glide.with(requireActivity()).load(guestbook.getPictureUrl()).into(guestBookImage);
+                    }
+
                 }
             }
 

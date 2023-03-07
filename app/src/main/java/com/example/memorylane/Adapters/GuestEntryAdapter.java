@@ -11,14 +11,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.memorylane.Classes.DeleteDialogEntry;
+import com.example.memorylane.Classes.DeleteDialogPicture;
 import com.example.memorylane.Classes.GuestEntry;
 import com.example.memorylane.Database.FirebaseDatabaseInstance;
 import com.example.memorylane.Classes.User;
+import com.example.memorylane.Database.UserSession;
 import com.example.memorylane.R;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.textview.MaterialTextView;
@@ -58,6 +63,17 @@ public class GuestEntryAdapter extends RecyclerView.Adapter<GuestEntryAdapter.Vi
             dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             loadUI(dialog, guestEntry);
             dialog.show();
+        });
+
+        holder.itemView.setOnLongClickListener(v -> {
+            if (UserSession.getInstance().getCurrentUser().getUid().equals(guestEntry.getUserID())) {
+                DeleteDialogEntry deleteDialogEntry = new DeleteDialogEntry(context, guestEntry);
+                deleteDialogEntry.show(((AppCompatActivity) context).getSupportFragmentManager(), "Entfernen");
+                return false;
+            } else Toast.makeText(context, "Nur eigene Einträge sind bearbeitbar", Toast.LENGTH_SHORT).show();
+
+            return true;
+
         });
     }
 

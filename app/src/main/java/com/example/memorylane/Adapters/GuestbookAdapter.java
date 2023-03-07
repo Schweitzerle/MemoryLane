@@ -5,12 +5,18 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.memorylane.Classes.DeleteDialogEntry;
+import com.example.memorylane.Classes.DeleteDialogGuestbook;
+import com.example.memorylane.Classes.DeleteDialogPicture;
 import com.example.memorylane.Classes.Guestbook;
+import com.example.memorylane.Database.UserSession;
 import com.example.memorylane.GuestbookActivity;
 import com.example.memorylane.R;
 import com.google.android.material.imageview.ShapeableImageView;
@@ -51,13 +57,23 @@ public class GuestbookAdapter extends RecyclerView.Adapter<GuestbookAdapter.View
             intent.putExtra(GuestbookActivity.GUESTBOOK_KEY, guestbook.getId());
             v.getContext().startActivity(intent);
         });
+
+        holder.itemView.setOnLongClickListener(v -> {
+            if (UserSession.getInstance().getCurrentUser().getUid().equals(guestbook.getCreatorId())) {
+                DeleteDialogGuestbook deleteDialogGuestbook = new DeleteDialogGuestbook(context, guestbook);
+                deleteDialogGuestbook.show(((AppCompatActivity) context).getSupportFragmentManager(), "Entfernen");
+                return false;
+            } else
+                Toast.makeText(context, "Nur eigene Gästebücher sind bearbeitbar", Toast.LENGTH_SHORT).show();
+
+            return true;
+        });
     }
 
     @Override
     public int getItemCount() {
         return mGuestbooks.size();
     }
-
 
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
