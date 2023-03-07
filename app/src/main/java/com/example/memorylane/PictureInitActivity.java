@@ -1,5 +1,6 @@
 package com.example.memorylane;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -19,6 +20,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.bumptech.glide.Glide;
+import com.example.memorylane.Classes.CustomProgressBarDialog;
 import com.example.memorylane.Classes.UploadedPicture;
 import com.example.memorylane.Database.FirebaseDatabaseInstance;
 import com.example.memorylane.Database.FirebaseStorageInstance;
@@ -50,6 +52,8 @@ public class PictureInitActivity extends AppCompatActivity {
     private DatabaseReference databaseReference;
     private StorageReference storageReference;
 
+    ProgressDialog progressDialog; //TODO: CUSTOM PROGRESS DIALOG
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +68,7 @@ public class PictureInitActivity extends AppCompatActivity {
         editText = findViewById(R.id.image_description_input);
         imageView = findViewById(R.id.init_gallery_image_preview);
         imageView.setOnClickListener(this::choosePicture);
+        progressDialog = new ProgressDialog(PictureInitActivity.this);
         ConstraintLayout constraintLayout = findViewById(R.id.constraint_layout);
         drawable = (AnimationDrawable) constraintLayout.getBackground();
         drawable.setEnterFadeDuration(2500);
@@ -86,7 +91,10 @@ public class PictureInitActivity extends AppCompatActivity {
                 } else if (imageView.getDrawable() == null) {
                     Toast.makeText(PictureInitActivity.this, "Bitte ein Bild hinzufügen!", Toast.LENGTH_SHORT).show();
                 } else {
-
+                    progressDialog.setMessage("Bitte warten während Bild eingetragen wird...");
+                    progressDialog.setTitle("Bild wird eingetragen...");
+                    progressDialog.setCanceledOnTouchOutside(false);
+                    progressDialog.show();
                     // Get the user's input from the UI elements
                     String name = editText.getText().toString();
                     String profilePictureString = getStringFromImage(imageView);
@@ -94,18 +102,12 @@ public class PictureInitActivity extends AppCompatActivity {
                     UploadedPicture uploadedPicture = new UploadedPicture(profilePictureString, name, UserSession.getInstance().getCurrentUser().getUid());
                     // Store the user's information in the database
                     storeUserInformation(uploadedPicture);
-                    if(getFragmentManager().getBackStackEntryCount() > 0) {
-                        getFragmentManager().popBackStack();
-                    }
-                    else {
-                        PictureInitActivity.super.onBackPressed();
-                    }
+
                 }
 
             }
         });
     }
-
 
 
     private void storeUserInformation(UploadedPicture uploadedPicture) {
@@ -116,12 +118,7 @@ public class PictureInitActivity extends AppCompatActivity {
         StorageReference imageRef = storageReference.child(uploadedPicture.getId());
         // Upload the picture to the storage
         UploadTask uploadTask = imageRef.putBytes(data);
-        uploadTask.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                // Handle unsuccessful uploads
-            }
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+        uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 // Get the download url for the picture
@@ -132,8 +129,21 @@ public class PictureInitActivity extends AppCompatActivity {
                         UploadedPicture uploadedPictureWithUrl = new UploadedPicture(uri.toString(), uploadedPicture.getDescription(), UserSession.getInstance().getCurrentUser().getUid());
                         uploadedPictureWithUrl.setId(uploadedPicture.getId());
                         databaseReference.child(uploadedPictureWithUrl.getId()).setValue(uploadedPictureWithUrl);
+
+                        progressDialog.dismiss();
+                        if (getFragmentManager().getBackStackEntryCount() > 0) {
+                            getFragmentManager().popBackStack();
+                        } else {
+                            PictureInitActivity.super.onBackPressed();
+                        }
                     }
                 });
+            }
+        })
+        .addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle unsuccessful uploads
             }
         });
     }

@@ -93,6 +93,7 @@ public class GuestbookCreationActivity extends AppCompatActivity {
                 DatePickerDialog dialog = new DatePickerDialog(GuestbookCreationActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                        month = month + 1;
                         String dateString = day+"."+month+"."+year;
                         date.setText(dateString);
                     }
