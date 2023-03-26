@@ -16,7 +16,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginBottom="70dp"
-        android:layout_marginTop="70sp"
+        android:layout_marginTop="100sp"
         android:layout_marginHorizontal="30sp"
         />
 

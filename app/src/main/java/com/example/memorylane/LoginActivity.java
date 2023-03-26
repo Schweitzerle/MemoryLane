@@ -27,7 +27,7 @@ import io.github.muddz.styleabletoast.StyleableToast;
 
 public class LoginActivity extends AppCompatActivity {
 
-    MaterialTextView newAccount;
+    MaterialButton newAccount;
 
     TextInputEditText email, password;
     MaterialButton confirmButton;

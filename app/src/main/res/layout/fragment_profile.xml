@@ -47,7 +47,7 @@
                     app:layout_constraintHeight_percent=".6"
                     app:cardElevation="50dp"
                     app:cardCornerRadius="20dp"
-                    app:cardBackgroundColor="@color/orange">
+                    >
 
                     <com.google.android.material.imageview.ShapeableImageView
                         android:id="@+id/user_profile"
@@ -70,7 +70,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:cardElevation="50dp"
                     app:cardCornerRadius="20dp"
-                    app:cardBackgroundColor="@color/orange">
+                    >
 
 
                     <com.google.android.material.imageview.ShapeableImageView
@@ -99,9 +99,8 @@
                     android:id="@+id/name_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10sp"
+                    android:layout_marginTop="10dp"
                     android:textAlignment="viewStart"
-                    android:textColor="@color/orange"
                     android:textSize="28sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -113,7 +112,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:textAlignment="viewStart"
-                    android:textColor="@color/dark_orange"
                     android:textSize="20sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -121,13 +119,12 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/sign_out_button"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp"
-                    android:background="@drawable/rounded_corners_orange"
-                    android:backgroundTint="@null"
+                    android:layout_marginHorizontal="20dp"
                     android:text="Sign out"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -149,7 +146,6 @@
         android:layout_marginHorizontal="20dp"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="70dp"
-        app:cardBackgroundColor="@color/orange"
         app:cardCornerRadius="30sp"
         app:cardElevation="50dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -167,11 +163,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
                 android:layout_marginTop="20dp"
-                android:background="@drawable/rounded_corners_dark_orange"
                 android:padding="10dp"
                 android:text="Deine Statistiken"
                 android:textAlignment="center"
-                android:textColor="@color/black"
                 android:textSize="40dp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -194,7 +188,6 @@
                     android:id="@+id/lin_sets_fav"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/bg_statistics"
                     android:padding="5dp"
                     app:layout_constraintBottom_toTopOf="@id/lin_sets_my"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -209,7 +202,6 @@
                         android:padding="10dp"
                         android:text="Favorisierte Sets"
                         android:textAlignment="viewStart"
-                        android:textColor="@color/black"
                         android:textSize="24sp" />
 
                     <TextView
@@ -219,7 +211,6 @@
                         android:layout_weight="1"
                         android:padding="10dp"
                         android:textAlignment="viewEnd"
-                        android:textColor="@color/black"
                         android:textSize="24sp" />
 
                 </LinearLayout>
@@ -229,7 +220,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
-                    android:background="@drawable/bg_statistics"
                     android:padding="5dp"
                     app:layout_constraintBottom_toTopOf="@id/lin_bricks"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -244,7 +234,6 @@
                         android:padding="10dp"
                         android:text="Sets in Besitz"
                         android:textAlignment="viewStart"
-                        android:textColor="@color/black"
                         android:textSize="24sp" />
 
                     <TextView
@@ -254,7 +243,6 @@
                         android:layout_weight="1"
                         android:padding="10dp"
                         android:textAlignment="viewEnd"
-                        android:textColor="@color/black"
                         android:textSize="24sp" />
 
                 </LinearLayout>
@@ -265,7 +253,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
-                    android:background="@drawable/bg_statistics"
                     android:padding="5dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -280,7 +267,6 @@
                         android:padding="10dp"
                         android:text="Steine Anzahl in meinen Sets"
                         android:textAlignment="viewStart"
-                        android:textColor="@color/black"
                         android:textSize="24sp" />
 
                     <TextView
@@ -290,7 +276,6 @@
                         android:layout_weight="1"
                         android:padding="10dp"
                         android:textAlignment="viewEnd"
-                        android:textColor="@color/black"
                         android:textSize="24sp" />
 
 

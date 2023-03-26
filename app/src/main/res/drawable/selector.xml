@@ -3,13 +3,13 @@
 
     <item
         android:state_selected="true"
-        android:drawable="@color/wine_red"
-        android:color="@color/light_red"
+        android:drawable="?attr/colorPrimary"
+        android:color="?attr/colorPrimary"
         />
 
     <item
         android:state_selected="false"
-        android:color="@color/red"
+        android:color="?attr/colorSecondary"
         />
 
 </selector>

@@ -30,7 +30,7 @@ import io.github.muddz.styleabletoast.StyleableToast;
 
 public class AuthenticationActivity extends AppCompatActivity {
 
-    MaterialTextView existingAccount;
+    MaterialButton existingAccount;
     TextInputEditText email, password, passwordConfirm, username;
     MaterialButton confirmButton;
     String emailValPattern = "[a-zA-Z0-9._-]+@[a-z-]+\\.+[a-z]+";

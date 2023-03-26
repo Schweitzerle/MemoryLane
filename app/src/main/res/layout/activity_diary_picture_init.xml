@@ -5,7 +5,7 @@
     android:id="@+id/constraint_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/gradient_list_red"
+    android:background="@drawable/gradient_list_dynamic"
     tools:context=".PictureInitActivity">
 
 
@@ -17,6 +17,7 @@
         android:paddingStart="20dp"
         android:paddingTop="20sp"
         android:paddingEnd="20dp"
+        android:textColor="?attr/colorOnSecondary"
         android:text="Eine neue Erinnerung"
         android:textSize="40sp"
         android:textStyle="bold"
@@ -41,8 +42,7 @@
             android:layout_height="400dp"
             android:layout_margin="10dp"
             android:layout_weight="60"
-            android:background="@drawable/gradient_down_top_all_corners_lightly_rounded_bg"
-            android:contentDescription=""
+            android:background="?attr/colorOnSecondary"
             android:padding="30dp"
             tools:srcCompat="@tools:sample/avatars" />
 
@@ -56,6 +56,7 @@
             android:layout_marginTop="30dp"
             android:layout_marginEnd="30dp"
             android:gravity="start"
+            android:textColor="?attr/colorOnSecondary"
             android:importantForAutofill="no"
             android:inputType="textMultiLine"
             android:textSize="22sp"
@@ -69,7 +70,7 @@
             android:layout_margin="10dp"
             android:background="@drawable/button_alarm_bg"
             android:text="Hinzufügen"
-            android:textColor="?attr/colorOnPrimary"
+            android:textColor="?attr/colorOnSecondary"
             android:textSize="20sp"
             app:backgroundTint="@null" />
     </LinearLayout>

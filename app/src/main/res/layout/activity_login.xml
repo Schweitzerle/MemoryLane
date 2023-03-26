@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/gradient_list_orange"
+    android:background="@drawable/gradient_list_dynamic"
     android:id="@+id/constraint_layout"
     tools:context=".LoginActivity">
 
@@ -28,11 +28,10 @@
         android:id="@+id/register_text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@drawable/bottom_corners_rounded_orange"
+        android:background="@drawable/bottom_corners_rounded"
         android:padding="20sp"
         android:text="Login"
         android:textAlignment="center"
-        android:textColor="@color/black"
         android:textSize="30dp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -54,8 +53,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Email"
-            android:textColor="@color/black"
-            android:textColorHint="@color/black"
             android:textSize="20dp"
             android:textStyle="bold" />
 
@@ -79,24 +76,19 @@
             android:layout_height="wrap_content"
             android:hint="Passwort"
             android:inputType="textPassword"
-            android:textColor="@color/black"
-            android:textColorHint="@color/black"
             android:textSize="20dp"
             android:textStyle="bold" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.textview.MaterialTextView
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/password_confirm"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
         android:layout_marginTop="20dp"
-        android:background="@drawable/rounded_corners_dark_orange"
         android:padding="10dp"
         android:text="Passwort vergessen?"
-        android:textColor="@color/black"
-        android:textColorHint="@color/black"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/text_input_layout" />
@@ -107,35 +99,29 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
         android:layout_marginTop="30sp"
-        android:background="@drawable/rounded_corners_orange"
         android:padding="10dp"
         android:text="Login"
-        android:textColor="@color/black"
-        android:textColorHint="@color/black"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:backgroundTint="@null"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/password_confirm" />
 
-    <com.google.android.material.textview.MaterialTextView
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/new_acc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
         android:layout_marginTop="30dp"
-        android:background="@drawable/rounded_corners_dark_orange"
         android:padding="10sp"
         android:text="Neuen Account erstellen?"
         android:textAlignment="center"
-        android:textColor="@color/black"
-        android:textColorHint="@color/black"
         android:textSize="20dp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/confirm_button" app:layout_constraintBottom_toTopOf="@id/google_button"/>
+        app:layout_constraintTop_toBottomOf="@id/confirm_button"
+        app:layout_constraintBottom_toTopOf="@id/google_button"/>
 
     <com.google.android.gms.common.SignInButton
         android:id="@+id/google_button"
@@ -144,8 +130,6 @@
         android:layout_marginHorizontal="20dp"
         android:layout_marginTop="30sp"
         android:backgroundTint="@null"
-        android:textColor="@color/black"
-        android:textColorHint="@color/black"
         android:textStyle="bold"
         android:layout_marginBottom="40dp"
         app:layout_constraintEnd_toEndOf="parent"

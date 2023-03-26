@@ -18,7 +18,7 @@
         android:layout_margin="10dp"
         app:cardElevation="50dp"
         app:cardCornerRadius="20dp"
-        app:cardBackgroundColor="?attr/colorOnPrimary">
+        >
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -39,7 +39,6 @@
                 android:layout_marginStart="8dp"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:textColor="?attr/colorOnSecondary"
                 app:layout_constraintStart_toEndOf="@+id/guestbook_image"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toTopOf="@id/guestbook_description"
@@ -51,7 +50,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:textSize="14sp"
-                android:textColor="?attr/colorOnSecondary"
                 app:layout_constraintStart_toEndOf="@+id/guestbook_image"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toTopOf="@id/guestbook_member_amount"
@@ -63,7 +61,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:textSize="14sp"
-                android:textColor="?attr/colorOnSecondary"
                 app:layout_constraintStart_toEndOf="@+id/guestbook_image"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toTopOf="@id/guestbook_picture_amount"
@@ -75,7 +72,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:textSize="14sp"
-                android:textColor="?attr/colorOnSecondary"
                 app:layout_constraintStart_toEndOf="@+id/guestbook_image"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toTopOf="@id/guestbook_entry_amount"
@@ -87,7 +83,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:textSize="14sp"
-                android:textColor="?attr/colorOnSecondary"
                 app:layout_constraintStart_toEndOf="@+id/guestbook_image"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/guestbook_picture_amount"
