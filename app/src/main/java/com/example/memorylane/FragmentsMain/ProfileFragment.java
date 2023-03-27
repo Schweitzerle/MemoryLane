@@ -263,7 +263,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
     private void signOut() {
         FirebaseAuth.getInstance().signOut();
-        StyleableToast.makeText(requireContext(), "Auf Wiedersehen " + name + "!", R.style.customToastLoggedIn).show();
+        StyleableToast.makeText(requireContext(), "Auf Wiedersehen " + name + "!", R.style.customToast).show();
         startActivity(new Intent(getContext(), LoginActivity.class));
     }
 

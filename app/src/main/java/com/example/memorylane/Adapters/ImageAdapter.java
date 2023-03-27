@@ -83,13 +83,13 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
 
         Glide.with(context).load(uploadedPicture.getImagePath()).into(shapeableImageView);
 
-        loadSignature(signatureImage);
+        loadSignature(signatureImage, uploadedPicture);
 
         imageDescription.setText(uploadedPicture.getDescription());
     }
 
-    private void loadSignature(ShapeableImageView signatureImage) {
-        DatabaseReference signatureRef = FirebaseDatabaseInstance.getInstance().getFirebaseDatabase().getReference("Users").child(UserSession.getInstance().getCurrentUser().getUid()).child("signatureUrl");
+    private void loadSignature(ShapeableImageView signatureImage, UploadedPicture uploadedPicture) {
+        DatabaseReference signatureRef = FirebaseDatabaseInstance.getInstance().getFirebaseDatabase().getReference("Users").child(uploadedPicture.getUploaderID()).child("signatureUrl");
         signatureRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

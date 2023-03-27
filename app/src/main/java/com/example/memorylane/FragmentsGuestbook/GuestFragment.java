@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.palette.graphics.Palette;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
@@ -31,6 +32,9 @@ public class GuestFragment extends Fragment {
 
     GuestEntryAdapter guestEntryAdapter;
     private RecyclerView guestList;
+
+    public static Palette.Swatch vibrantSwatch, lightVibrantSwatch, darkVibrantSwatch, mutedSwatch, lightMutedSwatch, darkMutedSwatch;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

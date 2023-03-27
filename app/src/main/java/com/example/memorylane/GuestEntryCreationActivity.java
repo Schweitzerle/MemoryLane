@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -35,6 +34,8 @@ import com.google.firebase.storage.UploadTask;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.UUID;
+
+import io.github.muddz.styleabletoast.StyleableToast;
 
 public class GuestEntryCreationActivity extends AppCompatActivity {
 
@@ -85,7 +86,7 @@ public class GuestEntryCreationActivity extends AppCompatActivity {
                 if (ageString.isEmpty() || ageString.length() < 2) {
                     description.setError("Eintrag ist zu kurz!");
                 } else if (imageView.getDrawable() == null) {
-                    Toast.makeText(GuestEntryCreationActivity.this, "Bitte ein Profilbild auswählen!", Toast.LENGTH_SHORT).show();
+                    StyleableToast.makeText(GuestEntryCreationActivity.this, "Bitte ein Profilbild auswählen!", R.style.customToast).show();
                 } else {
                     progressDialog.setMessage("Bitte warten während Eintrags Erstellung...");
                     progressDialog.setTitle("Eintrag wird erstellt");
@@ -153,7 +154,7 @@ public class GuestEntryCreationActivity extends AppCompatActivity {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
-                Toast.makeText(GuestEntryCreationActivity.this, "Fehler beim Upload in Database", Toast.LENGTH_SHORT).show();
+                StyleableToast.makeText(GuestEntryCreationActivity.this, "Fehler beim Upload in Database...", R.style.customToast).show();
                 // Handle unsuccessful uploads
             }
         });

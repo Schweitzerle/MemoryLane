@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,7 +14,6 @@ import com.example.memorylane.Database.UserSession;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -120,7 +118,7 @@ public class LoginActivity extends AppCompatActivity {
                                 name = "";
                                 for (DataSnapshot legoSetSnapshot : dataSnapshot.getChildren()) {
                                     name = legoSetSnapshot.child("User_Name").getValue(String.class);
-                                    StyleableToast.makeText(getBaseContext(), "Wilkommen " + name + "!", R.style.customToastLoggedIn).show();
+                                    StyleableToast.makeText(LoginActivity.this, "Wilkommen " + name + "!", R.style.customToast).show();
                                 }
                             }
 
@@ -134,7 +132,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 } else {
                     progressDialog.dismiss();
-                    Toast.makeText(getBaseContext(), "Login fehlgeschlagen:" + task.getException(), Toast.LENGTH_SHORT).show();
+                    StyleableToast.makeText(getBaseContext(), "Login fehlgeschlagen...", R.style.customToast).show();
 
                 }
             }

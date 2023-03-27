@@ -117,7 +117,8 @@ public class LoginGoogleActivity extends LoginActivity {
                                             userData.put("User_Name", Objects.requireNonNull(user.getDisplayName()));
                                             legoSetRef.setValue(userData);
                                         }
-                                        StyleableToast.makeText(getBaseContext(), "Willkommen " + name + "!", R.style.customToastLoggedIn).show();
+
+                                        StyleableToast.makeText(LoginGoogleActivity.this, "Wilkommen " + name + "!", R.style.customToast).show();
 
                                     }
 
@@ -130,7 +131,8 @@ public class LoginGoogleActivity extends LoginActivity {
                             updateUI(user);
                         } else {
                             progressDialog.dismiss();
-                            Toast.makeText(LoginGoogleActivity.this, "" + task.getException(), Toast.LENGTH_SHORT).show();
+                            StyleableToast.makeText(getBaseContext(), "" + task.getException(), R.style.customToast).show();
+
                             finish();
                         }
                     }

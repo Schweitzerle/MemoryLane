@@ -6,13 +6,11 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -20,7 +18,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.bumptech.glide.Glide;
-import com.example.memorylane.Classes.CustomProgressBarDialog;
 import com.example.memorylane.Classes.UploadedPicture;
 import com.example.memorylane.Database.FirebaseDatabaseInstance;
 import com.example.memorylane.Database.FirebaseStorageInstance;
@@ -36,6 +33,8 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+
+import io.github.muddz.styleabletoast.StyleableToast;
 
 public class PictureInitActivity extends AppCompatActivity {
 
@@ -89,7 +88,7 @@ public class PictureInitActivity extends AppCompatActivity {
                 if (userNameString.isEmpty()) {
                     editText.setError("Beschreibung hinzufügen!");
                 } else if (imageView.getDrawable() == null) {
-                    Toast.makeText(PictureInitActivity.this, "Bitte ein Bild hinzufügen!", Toast.LENGTH_SHORT).show();
+                    StyleableToast.makeText(PictureInitActivity.this, "Bitte ein Bild hinzufügen!", R.style.customToast).show();
                 } else {
                     progressDialog.setMessage("Bitte warten während Bild eingetragen wird...");
                     progressDialog.setTitle("Bild wird eingetragen...");

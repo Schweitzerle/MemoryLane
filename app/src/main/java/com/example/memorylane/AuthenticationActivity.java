@@ -14,7 +14,6 @@ import com.example.memorylane.Database.FirebaseDatabaseInstance;
 import com.example.memorylane.Database.UserSession;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -133,7 +132,7 @@ public class AuthenticationActivity extends AppCompatActivity {
                     sendUserToNextActivity();
                 } else {
                     progressDialog.dismiss();
-                    Toast.makeText(getBaseContext(), "Registrierung fehlgeschlagen:" + task.getException(), Toast.LENGTH_SHORT).show();
+                    StyleableToast.makeText(AuthenticationActivity.this, "Regiistrierung fehlgeschlagen: ", R.style.customToast).show();
                 }
             });
 

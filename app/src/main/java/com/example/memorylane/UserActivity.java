@@ -12,7 +12,6 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -35,6 +34,8 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+
+import io.github.muddz.styleabletoast.StyleableToast;
 
 public class UserActivity extends AppCompatActivity {
 
@@ -97,9 +98,11 @@ public class UserActivity extends AppCompatActivity {
                 } else if (ageString.isEmpty()) {
                     ageEditText.setError("Alter ist leer!");
                 } else if (profilePictureImageView.getDrawable() == null) {
-                    Toast.makeText(UserActivity.this, "Bitte ein Profilbild auswählen!", Toast.LENGTH_SHORT).show();
+                    StyleableToast.makeText(getBaseContext(), "Bitte ein Profilbild hinzufügen!", R.style.customToast).show();
+
                 } else if (signature.getDrawable() == null) {
-                    Toast.makeText(UserActivity.this, "Bitte eine Signatur hinzufügen!", Toast.LENGTH_SHORT).show();
+                    StyleableToast.makeText(UserActivity.this, "Bitte eine Signatur hinzufügen!", R.style.customToast).show();
+
                 } else {
                     progressDialog.setMessage("Bitte warten während User Erstellung...");
                     progressDialog.setTitle("User wird erstellt");

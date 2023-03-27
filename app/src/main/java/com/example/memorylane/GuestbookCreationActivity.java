@@ -12,9 +12,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.view.View;
-import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -31,7 +29,6 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -41,6 +38,8 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.Objects;
 import java.util.UUID;
+
+import io.github.muddz.styleabletoast.StyleableToast;
 
 public class GuestbookCreationActivity extends AppCompatActivity {
 
@@ -114,7 +113,7 @@ public class GuestbookCreationActivity extends AppCompatActivity {
                 } else if (ageString.isEmpty() || ageString.length() < 2) {
                     description.setError("Beschreibung ist zu kurz!");
                 } else if (imageView.getDrawable() == null) {
-                    Toast.makeText(GuestbookCreationActivity.this, "Bitte ein Profilbild auswählen!", Toast.LENGTH_SHORT).show();
+                    StyleableToast.makeText(GuestbookCreationActivity.this, "Bitte ein Profilbild auswählen!", R.style.customToast).show();
                 } else {
                     progressDialog.setMessage("Bitte warten während Gästebuch Erstellung...");
                     progressDialog.setTitle("Gästebuch wird erstellt");
@@ -180,8 +179,7 @@ public class GuestbookCreationActivity extends AppCompatActivity {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
-                Toast.makeText(GuestbookCreationActivity.this, "Fehler beim Upload in Database", Toast.LENGTH_SHORT).show();
-                // Handle unsuccessful uploads
+                StyleableToast.makeText(GuestbookCreationActivity.this, "Fehler beim Upload in Database...", R.style.customToast).show();                // Handle unsuccessful uploads
             }
         });
     }

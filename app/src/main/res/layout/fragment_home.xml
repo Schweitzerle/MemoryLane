@@ -14,7 +14,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="300dp"
         android:layout_margin="10dp"
         app:cardElevation="50dp"
         app:cardCornerRadius="20dp"
@@ -27,7 +27,7 @@
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/guestbook_image"
                 android:layout_width="100dp"
-                android:layout_height="150dp"
+                android:layout_height="300dp"
                 android:scaleType="centerCrop"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

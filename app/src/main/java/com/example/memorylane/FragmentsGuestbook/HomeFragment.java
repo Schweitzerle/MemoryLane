@@ -1,21 +1,33 @@
 package com.example.memorylane.FragmentsGuestbook;
 
+import android.animation.ValueAnimator;
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ShapeDrawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.palette.graphics.Palette;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.CompositePageTransformer;
 import androidx.viewpager2.widget.MarginPageTransformer;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.example.memorylane.Adapters.SliderAdapter;
 import com.example.memorylane.Classes.GuestEntry;
 import com.example.memorylane.Classes.Guestbook;
@@ -25,6 +37,7 @@ import com.example.memorylane.Database.FirebaseDatabaseInstance;
 import com.example.memorylane.Database.UserSession;
 import com.example.memorylane.GuestbookActivity;
 import com.example.memorylane.R;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.database.DataSnapshot;
@@ -32,6 +45,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,6 +60,8 @@ public class HomeFragment extends Fragment {
     private Handler sliderHandler = new Handler();
     private MaterialTextView guestbookName, guestBookDescription, amountOfPictures, amountOfEntries, date;
     private ShapeableImageView guestBookImage;
+    private Palette.Swatch vibrantSwatch, lightVibrantSwatch, darkVibrantSwatch, mutedSwatch, lightMutedSwatch, darkMutedSwatch;
+
 
 
     @Override
@@ -62,14 +81,71 @@ public class HomeFragment extends Fragment {
         amountOfEntries = fragmentView.findViewById(R.id.guestbook_entry_amount);
         date = fragmentView.findViewById(R.id.guestbook_member_amount);
         amountOfPictures = fragmentView.findViewById(R.id.guestbook_picture_amount);
-        iniCardView();
+        iniCardView(fragmentView);
         initImageList(fragmentView);
-
-        Log.d("User", UserSession.getInstance().getCurrentUser().getUid() );
-
     }
 
-    private void iniCardView() {
+
+
+    private void initNumberAnimMembers(View view, int end) {
+        MaterialTextView member = view.findViewById(R.id.guestbook_member_amount);
+        int start = 0;
+        int endBricks = end;
+
+
+        if (endBricks != 0) {
+            ValueAnimator animatorBricks = ValueAnimator.ofInt(start, endBricks);
+            animatorBricks.setDuration(1000);
+            animatorBricks.addUpdateListener(animation -> {
+                int value = (int) animation.getAnimatedValue();
+                member.setText(String.valueOf(value));
+            });
+            animatorBricks.start();
+        } else {
+            member.setText("0");
+        }
+    }
+
+    private void initNumberAnimPictures(int end) {
+        int start = 0;
+        int endBricks = end;
+
+
+        if (endBricks != 0) {
+            ValueAnimator animatorBricks = ValueAnimator.ofInt(start, endBricks);
+            animatorBricks.setDuration(1000);
+            animatorBricks.addUpdateListener(animation -> {
+                int value = (int) animation.getAnimatedValue();
+                amountOfPictures.setText(String.valueOf(value));
+            });
+            animatorBricks.start();
+        } else {
+            amountOfPictures.setText("0");
+        }
+    }
+
+    private void initNumberAnimEntries(int end) {
+        int start = 0;
+        int endBricks = end;
+
+
+        if (endBricks != 0) {
+            ValueAnimator animatorBricks = ValueAnimator.ofInt(start, endBricks);
+            animatorBricks.setDuration(1000);
+            animatorBricks.addUpdateListener(animation -> {
+                int value = (int) animation.getAnimatedValue();
+                amountOfEntries.setText(String.valueOf(value));
+            });
+            animatorBricks.start();
+        } else {
+            amountOfEntries.setText("0");
+        }
+    }
+
+
+
+
+private void iniCardView(View fragmentView) {
         DatabaseReference guestbooksRef = FirebaseDatabaseInstance.getInstance().getFirebaseDatabase().getReference("Guestbooks");
         guestbooksRef.child(GuestbookActivity.guestbookID).addValueEventListener(new ValueEventListener() {
             @Override
@@ -82,6 +158,27 @@ public class HomeFragment extends Fragment {
                         guestBookDescription.setText(guestbook.getDescription());
                         date.setText(guestbook.getDate());
                         Glide.with(requireActivity()).load(guestbook.getPictureUrl()).into(guestBookImage);
+                        Glide.with(requireActivity())
+                                .asBitmap()
+                                .load(guestbook.getPictureUrl())
+                                .into(new SimpleTarget<Bitmap>() {
+                                    @Override
+                                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                                        // do something with the Bitmap
+                                        Palette.from(resource).maximumColorCount(32).generate(palette -> {
+                                            vibrantSwatch = palette.getVibrantSwatch();
+                                            lightVibrantSwatch = palette.getLightVibrantSwatch();
+                                            darkVibrantSwatch = palette.getDarkVibrantSwatch();
+                                            mutedSwatch = palette.getMutedSwatch();
+                                            lightMutedSwatch = palette.getLightMutedSwatch();
+                                            darkMutedSwatch = palette.getDarkMutedSwatch();
+                                            if (vibrantSwatch != null) {
+
+                                            }
+                                        });
+                                    }
+                                });
+
                     }
 
                 }
@@ -102,6 +199,7 @@ public class HomeFragment extends Fragment {
                     uploadedPictures.add(uploadedPicture);
                 }
                 amountOfPictures.setText("Erinnerungen: " + uploadedPictures.size());
+                initNumberAnimPictures(uploadedPictures.size());
             }
 
             @Override
@@ -119,6 +217,7 @@ public class HomeFragment extends Fragment {
                     guestEntries.add(guestEntry);
                 }
                 amountOfEntries.setText("Gästeeinträge: " + guestEntries.size());
+                initNumberAnimEntries(guestEntries.size());
             }
 
             @Override
@@ -127,8 +226,6 @@ public class HomeFragment extends Fragment {
             }
         });
     }
-
-
 
 
     private void initImageList(View fragmentView) {
@@ -201,6 +298,82 @@ public class HomeFragment extends Fragment {
         super.onResume();
         sliderHandler.postDelayed(sliderRunnable, 3000);
     }
+
+
+
+
+        private class LoadImageTask extends AsyncTask<String, Void, Bitmap> {
+
+            private Exception exception;
+
+            @Override
+            protected Bitmap doInBackground(String... urls) {
+                try {
+                    URL url = new URL(urls[0]);
+                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                    connection.setDoInput(true);
+                    connection.connect();
+                    InputStream input = connection.getInputStream();
+
+                    // Calculate inSampleSize
+                    BitmapFactory.Options options = new BitmapFactory.Options();
+                    options.inJustDecodeBounds = true;
+                    BitmapFactory.decodeStream(input, null, options);
+                    int imageWidth = options.outWidth;
+                    int imageHeight = options.outHeight;
+                    int reqWidth = 500; // Your desired width
+                    int reqHeight = 500; // Your desired height
+                    options.inSampleSize = calculateInSampleSize(imageWidth, imageHeight, reqWidth, reqHeight);
+                    options.inJustDecodeBounds = false;
+
+                    // Decode the bitmap with reduced size
+                    input = connection.getInputStream();
+                    Bitmap bitmap = BitmapFactory.decodeStream(input, null, options);
+                    return bitmap;
+                } catch (Exception e) {
+                    this.exception = e;
+                    return null;
+                }
+            }
+
+            @Override
+            protected void onPostExecute(Bitmap generatedBitmap) {
+                if (exception != null) {
+                    // Handle the exception
+                } else {
+                        // Use the bitmap
+                        Palette.from(generatedBitmap).generate(palette -> {
+                            vibrantSwatch = palette.getVibrantSwatch();
+                            lightVibrantSwatch = palette.getLightVibrantSwatch();
+                            darkVibrantSwatch = palette.getDarkVibrantSwatch();
+                            mutedSwatch = palette.getMutedSwatch();
+                            lightMutedSwatch = palette.getLightMutedSwatch();
+                            darkMutedSwatch = palette.getDarkMutedSwatch();
+                        });
+
+
+                        ShapeDrawable shapeDrawable = (ShapeDrawable) ContextCompat.getDrawable(requireContext(), R.drawable.round_corners_secondary);
+                        shapeDrawable.getPaint().setColor(vibrantSwatch.getBodyTextColor());
+
+
+
+                }
+            }
+
+            private int calculateInSampleSize(int imageWidth, int imageHeight, int reqWidth, int reqHeight) {
+                int inSampleSize = 1;
+                if (imageHeight > reqHeight || imageWidth > reqWidth) {
+                    final int halfHeight = imageHeight / 2;
+                    final int halfWidth = imageWidth / 2;
+                    while ((halfHeight / inSampleSize) >= reqHeight && (halfWidth / inSampleSize) >= reqWidth) {
+                        inSampleSize *= 2;
+                    }
+                }
+                return inSampleSize;
+            }
+        }
+
+
 }
 
 
