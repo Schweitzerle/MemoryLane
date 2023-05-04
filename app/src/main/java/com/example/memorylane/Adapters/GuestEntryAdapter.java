@@ -19,7 +19,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.memorylane.Classes.DeleteDialogEntry;
-import com.example.memorylane.Classes.DeleteDialogPicture;
 import com.example.memorylane.Classes.GuestEntry;
 import com.example.memorylane.Database.FirebaseDatabaseInstance;
 import com.example.memorylane.Classes.User;
@@ -79,7 +78,7 @@ public class GuestEntryAdapter extends RecyclerView.Adapter<GuestEntryAdapter.Vi
 
     private void loadUI(Dialog dialog, GuestEntry guestEntry) {
         ShapeableImageView signatureImage = dialog.findViewById(R.id.signature);
-        ImageView imageView = dialog.findViewById(R.id.guestbook_image);
+        ImageView imageView = dialog.findViewById(R.id.user_image);
         TextView age = dialog.findViewById(R.id.age);
         TextView name = dialog.findViewById(R.id.guest_name);
         TextView entryText = dialog.findViewById(R.id.entryText);
@@ -138,7 +137,7 @@ public class GuestEntryAdapter extends RecyclerView.Adapter<GuestEntryAdapter.Vi
 
         public ViewHolder(View itemView) {
             super(itemView);
-            mGuestbookImage = itemView.findViewById(R.id.guestbook_image);
+            mGuestbookImage = itemView.findViewById(R.id.user_image);
             mGuestbookName = itemView.findViewById(R.id.guest_name);
         }
 

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -18,6 +19,8 @@ import com.example.memorylane.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -27,7 +30,6 @@ public class GuetsbooksAsMemberFragment extends Fragment {
 
     GuestbookAdapter guestbookAdapter;
     RecyclerView recyclerView;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -45,24 +47,29 @@ public class GuetsbooksAsMemberFragment extends Fragment {
     }
 
     private void retrieveUserGuestbooks() {
-        DatabaseReference guestbooksRef = FirebaseDatabaseInstance.getInstance().getFirebaseDatabase().getReference("guestbooks");
-        guestbooksRef.orderByChild("members/" + UserSession.getInstance().getCurrentUser().getUid()).equalTo(true).addValueEventListener(new ValueEventListener() {
+        String userId = UserSession.getInstance().getCurrentUser().getUid(); // replace with the user ID you want to search for
+
+        DatabaseReference databaseReference = FirebaseDatabaseInstance.getInstance().getFirebaseDatabase().getReference("Guestbooks");
+        Query query = databaseReference.orderByChild("Members/" + userId).equalTo(true);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                List<Guestbook> userGuestbooks = new ArrayList<>();
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Guestbook guestbook = snapshot.getValue(Guestbook.class);
-                    userGuestbooks.add(guestbook);
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                List<Guestbook> guestbooks = new ArrayList<>();
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    Guestbook guestbook = dataSnapshot.getValue(Guestbook.class);
+                    guestbooks.add(guestbook);
                 }
-                guestbookAdapter = new GuestbookAdapter(getContext(), userGuestbooks);
-                recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                recyclerView.setAdapter(guestbookAdapter);
+                Toast.makeText(getContext(), String.valueOf(guestbooks.size()), Toast.LENGTH_SHORT).show();
+                // Do something with the list of guestbooks where the user is a member
             }
 
+
             @Override
-            public void onCancelled(DatabaseError databaseError) {
+            public void onCancelled(@NonNull DatabaseError error) {
                 // Handle error
             }
         });
+
+
     }
 }

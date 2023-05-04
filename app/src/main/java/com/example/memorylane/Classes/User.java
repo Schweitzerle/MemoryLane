@@ -22,6 +22,14 @@ public class User {
         this.imageUrl = imageUrl;
     }
 
+    public void setUserID(String userID) {
+        UserID = userID;
+    }
+
+    public String getUserID() {
+        return UserID;
+    }
+
     public int getAge() {
         return age;
     }

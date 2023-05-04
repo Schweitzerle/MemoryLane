@@ -101,13 +101,8 @@ public class AuthenticationActivity extends AppCompatActivity {
 
                     FirebaseUser user = mAuth.getCurrentUser();
                     UserSession.getInstance().setCurrentUser(user);
-                    DatabaseReference favoritesRef = FirebaseDatabaseInstance.getInstance().getFirebaseDatabase().getReference("Users").child(UserSession.getInstance().getCurrentUser().getUid()).child("User");
+                    DatabaseReference favoritesRef = FirebaseDatabaseInstance.getInstance().getFirebaseDatabase().getReference("Users").child(UserSession.getInstance().getCurrentUser().getUid());
 
-                    DatabaseReference legoSetRef = favoritesRef.push();
-
-                    Map<String, Object> userData = new HashMap<>();
-                    userData.put("User_Name", Objects.requireNonNull(username.getText()).toString());
-                    legoSetRef.setValue(userData);
                     progressDialog.dismiss();
 
 

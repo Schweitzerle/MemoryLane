@@ -98,35 +98,24 @@ public class LoginGoogleActivity extends LoginActivity {
                             progressDialog.dismiss();
                             FirebaseUser user = mAuth.getCurrentUser();
                             UserSession.getInstance().setCurrentUser(user);
-                           DatabaseReference favoritesRef = FirebaseDatabaseInstance.getInstance().getFirebaseDatabase().getReference("Users").child(UserSession.getInstance().getCurrentUser().getUid()).child("User");
 
-                            DatabaseReference legoSetRef = favoritesRef.push();
+                            DatabaseReference favoritesRef = FirebaseDatabaseInstance.getInstance().getFirebaseDatabase().getReference("Users").child(UserSession.getInstance().getCurrentUser().getUid());
 
-                            if (UserSession.getInstance().getCurrentUser() != null) {
-                                favoritesRef.addValueEventListener(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                        name = "";
-                                        for (DataSnapshot legoSetSnapshot : dataSnapshot.getChildren()) {
-                                            name = legoSetSnapshot.child("User_Name").getValue(String.class);
-                                        }
-                                        assert name != null;
-                                        if (!name.equals(Objects.requireNonNull(UserSession.getInstance().getCurrentUser().getDisplayName()))) {
-                                            Map<String, Object> userData = new HashMap<>();
-                                            assert user != null;
-                                            userData.put("User_Name", Objects.requireNonNull(user.getDisplayName()));
-                                            legoSetRef.setValue(userData);
-                                        }
+                            favoritesRef.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    name = "";
 
-                                        StyleableToast.makeText(LoginGoogleActivity.this, "Wilkommen " + name + "!", R.style.customToast).show();
+                                    name = dataSnapshot.child("username").getValue(String.class);
+                                    StyleableToast.makeText(LoginGoogleActivity.this, "Wilkommen " + name + "!", R.style.customToast).show();
+                                }
 
-                                    }
 
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                                    }
-                                });
-                            }
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+                                    // Handle error
+                                }
+                            });
 
                             updateUI(user);
                         } else {

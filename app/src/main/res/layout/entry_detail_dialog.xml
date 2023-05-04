@@ -94,7 +94,7 @@
                 android:layout_height="match_parent">
 
                 <com.google.android.material.imageview.ShapeableImageView
-                    android:id="@+id/guestbook_image"
+                    android:id="@+id/user_image"
                     android:layout_width="140dp"
                     android:layout_height="140dp"
                     android:scaleType="centerCrop"
@@ -114,7 +114,7 @@
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/guestbook_image" />
+                    app:layout_constraintTop_toBottomOf="@id/user_image" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/age"

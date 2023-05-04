@@ -2,18 +2,16 @@ package com.example.memorylane.FragmentsGuestbook;
 
 import android.animation.ValueAnimator;
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -34,10 +32,10 @@ import com.example.memorylane.Classes.Guestbook;
 import com.example.memorylane.Classes.SliderItem;
 import com.example.memorylane.Classes.UploadedPicture;
 import com.example.memorylane.Database.FirebaseDatabaseInstance;
-import com.example.memorylane.Database.UserSession;
 import com.example.memorylane.GuestbookActivity;
 import com.example.memorylane.R;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.example.memorylane.RequestsActivity;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.database.DataSnapshot;
@@ -45,7 +43,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -60,6 +57,7 @@ public class HomeFragment extends Fragment {
     private Handler sliderHandler = new Handler();
     private MaterialTextView guestbookName, guestBookDescription, amountOfPictures, amountOfEntries, date;
     private ShapeableImageView guestBookImage;
+    private FloatingActionButton floatingActionButton;
     private Palette.Swatch vibrantSwatch, lightVibrantSwatch, darkVibrantSwatch, mutedSwatch, lightMutedSwatch, darkMutedSwatch;
 
 
@@ -75,14 +73,16 @@ public class HomeFragment extends Fragment {
 
     private void initUI(View fragmentView) {
         viewPager2 = fragmentView.findViewById(R.id.view_pager_image_slider);
-        guestBookImage = fragmentView.findViewById(R.id.guestbook_image);
+        guestBookImage = fragmentView.findViewById(R.id.user_image);
         guestbookName = fragmentView.findViewById(R.id.guest_name);
         guestBookDescription = fragmentView.findViewById(R.id.guestbook_description);
         amountOfEntries = fragmentView.findViewById(R.id.guestbook_entry_amount);
         date = fragmentView.findViewById(R.id.guestbook_member_amount);
         amountOfPictures = fragmentView.findViewById(R.id.guestbook_picture_amount);
+        floatingActionButton = fragmentView.findViewById(R.id.requestsButton);
         iniCardView(fragmentView);
         initImageList(fragmentView);
+        floatingActionButton.setOnClickListener(v -> startActivity(new Intent(getActivity(), RequestsActivity.class)));
     }
 
 

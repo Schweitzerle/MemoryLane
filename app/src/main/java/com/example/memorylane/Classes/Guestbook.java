@@ -1,6 +1,8 @@
 package com.example.memorylane.Classes;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Guestbook {
@@ -10,6 +12,7 @@ public class Guestbook {
     public String description;
     public String creatorId;
     public String date;
+    public List<String> members;
     public boolean isPublic;
 
     public Guestbook() {
@@ -24,6 +27,7 @@ public class Guestbook {
         this.creatorId = creatorId;
         this.isPublic = isPublic;
         this.date = date;
+        this.members = new ArrayList<>();
     }
 
     public Map<String, Object> toMap() {
@@ -36,6 +40,14 @@ public class Guestbook {
         result.put("isPublic", isPublic);
         result.put("date", date);
         return result;
+    }
+
+    public List<String> getMembers() {
+        return members;
+    }
+
+    public void setMembers(List<String> members) {
+        this.members = members;
     }
 
     public String getDate() {

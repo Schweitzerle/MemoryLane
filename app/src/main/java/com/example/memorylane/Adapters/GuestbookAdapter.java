@@ -12,10 +12,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.memorylane.Classes.DeleteDialogEntry;
 import com.example.memorylane.Classes.DeleteDialogGuestbook;
-import com.example.memorylane.Classes.DeleteDialogPicture;
 import com.example.memorylane.Classes.Guestbook;
+import com.example.memorylane.Classes.JoinGuestbookDialog;
 import com.example.memorylane.Database.UserSession;
 import com.example.memorylane.GuestbookActivity;
 import com.example.memorylane.R;
@@ -63,10 +62,12 @@ public class GuestbookAdapter extends RecyclerView.Adapter<GuestbookAdapter.View
                 DeleteDialogGuestbook deleteDialogGuestbook = new DeleteDialogGuestbook(context, guestbook);
                 deleteDialogGuestbook.show(((AppCompatActivity) context).getSupportFragmentManager(), "Entfernen");
                 return false;
-            } else
+            } else {
+                JoinGuestbookDialog joinGuestbookDialog = new JoinGuestbookDialog(context, guestbook);
+                joinGuestbookDialog.show(((AppCompatActivity) context).getSupportFragmentManager(), "Anfragen");
                 Toast.makeText(context, "Nur eigene Gästebücher sind bearbeitbar", Toast.LENGTH_SHORT).show();
-
-            return true;
+                return true;
+            }
         });
     }
 
@@ -83,7 +84,7 @@ public class GuestbookAdapter extends RecyclerView.Adapter<GuestbookAdapter.View
 
         public ViewHolder(View itemView) {
             super(itemView);
-            mGuestbookImage = itemView.findViewById(R.id.guestbook_image);
+            mGuestbookImage = itemView.findViewById(R.id.user_image);
             mGuestbookName = itemView.findViewById(R.id.guest_name);
             mGuestbookDescription = itemView.findViewById(R.id.guestbook_description);
             itemView.setOnClickListener(this);

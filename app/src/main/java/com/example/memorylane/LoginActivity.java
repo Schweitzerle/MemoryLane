@@ -110,17 +110,17 @@ public class LoginActivity extends AppCompatActivity {
                     UserSession.getInstance().setCurrentUser(user);
 
                     if (UserSession.getInstance().getCurrentUser() != null) {
-                        DatabaseReference favoritesRef = FirebaseDatabaseInstance.getInstance().getFirebaseDatabase().getReference("Users").child(UserSession.getInstance().getCurrentUser().getUid()).child("User");
+                        DatabaseReference favoritesRef = FirebaseDatabaseInstance.getInstance().getFirebaseDatabase().getReference("Users").child(UserSession.getInstance().getCurrentUser().getUid());
 
                         favoritesRef.addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 name = "";
-                                for (DataSnapshot legoSetSnapshot : dataSnapshot.getChildren()) {
-                                    name = legoSetSnapshot.child("User_Name").getValue(String.class);
+
+                                    name = dataSnapshot.child("username").getValue(String.class);
                                     StyleableToast.makeText(LoginActivity.this, "Wilkommen " + name + "!", R.style.customToast).show();
                                 }
-                            }
+
 
                             @Override
                             public void onCancelled(@NonNull DatabaseError databaseError) {
