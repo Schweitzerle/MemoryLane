@@ -13,6 +13,9 @@ import android.provider.MediaStore;
 import android.util.Base64;
 import android.view.View;
 import android.widget.DatePicker;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -27,7 +30,6 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.imageview.ShapeableImageView;
-import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.storage.StorageReference;
@@ -49,7 +51,7 @@ public class GuestbookCreationActivity extends AppCompatActivity {
     ShapeableImageView imageView;
     TextInputEditText name, description;
     MaterialButton date;
-    SwitchMaterial switchMaterial;
+    RadioGroup radioGroup;
 
     ProgressDialog progressDialog;
 
@@ -71,7 +73,7 @@ public class GuestbookCreationActivity extends AppCompatActivity {
         drawable.setExitFadeDuration(5000);
         drawable.start();
         progressDialog = new ProgressDialog(GuestbookCreationActivity.this);
-        switchMaterial = findViewById(R.id.guestbook_public_switch);
+        radioGroup = findViewById(R.id.radioGroupStatus);
         name = findViewById(R.id.username);
         description = findViewById(R.id.email);
         date = findViewById(R.id.date);
@@ -107,6 +109,8 @@ public class GuestbookCreationActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String userNameString = name.getText().toString();
                 String ageString = description.getText().toString();
+                int selectedId = radioGroup.getCheckedRadioButtonId();
+
 
                 if (userNameString.isEmpty() || name.length() < 2) {
                     name.setError("Gästebuchname ist zu kurz!");
@@ -114,7 +118,14 @@ public class GuestbookCreationActivity extends AppCompatActivity {
                     description.setError("Beschreibung ist zu kurz!");
                 } else if (imageView.getDrawable() == null) {
                     StyleableToast.makeText(GuestbookCreationActivity.this, "Bitte ein Profilbild auswählen!", R.style.customToast).show();
+                } else if (selectedId == -1) {
+                    // No radio button is selected, show an error message
+                    Toast.makeText(getApplicationContext(), "Bitte für eine Option entscheiden", Toast.LENGTH_SHORT).show();
                 } else {
+                    // A radio button is selected, proceed with the creation of the guestbook
+                    RadioButton radioButton = findViewById(selectedId);
+                    String option = radioButton.getText().toString();
+                    // Do something with the selected option
                     progressDialog.setMessage("Bitte warten während Gästebuch Erstellung...");
                     progressDialog.setTitle("Gästebuch wird erstellt");
                     progressDialog.setCanceledOnTouchOutside(false);
@@ -122,7 +133,7 @@ public class GuestbookCreationActivity extends AppCompatActivity {
 
                     String imageString = getStringFromImage(imageView);
 
-                    storeUserInformation(imageString, Objects.requireNonNull(name.getText()).toString(), imageString, description.getText().toString(), switchMaterial.isChecked());
+                    storeUserInformation(imageString, Objects.requireNonNull(name.getText()).toString(), imageString, description.getText().toString(), option);
 
                 }
             }
@@ -141,7 +152,7 @@ public class GuestbookCreationActivity extends AppCompatActivity {
     }
 
 
-    private void storeUserInformation(String imageString, String name, String pictureUrl, String description, boolean isPublic) {
+    private void storeUserInformation(String imageString, String name, String pictureUrl, String description, String publicity) {
 
         // Create a unique file name for the picture
         String fileName = UUID.randomUUID().toString();
@@ -161,7 +172,7 @@ public class GuestbookCreationActivity extends AppCompatActivity {
                     public void onSuccess(Uri uri) {
                         String imageUrl = uri.toString();
                         // Create a new guestbook with the user's information
-                        Guestbook guestbook = new Guestbook(fileName,  name, imageUrl, description, UserSession.getInstance().getCurrentUser().getUid(), date.getText().toString(), isPublic);
+                        Guestbook guestbook = new Guestbook(fileName,  name, imageUrl, description, UserSession.getInstance().getCurrentUser().getUid(), date.getText().toString(), publicity);
                         // Store the guestbook in the database
                         gbRef.setValue(guestbook);
                         // Dismiss the progress dialog

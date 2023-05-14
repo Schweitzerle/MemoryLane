@@ -45,7 +45,26 @@ public class GuestbooksFragment extends Fragment {
 
     private void retrieveUserGuestbooks() {
         DatabaseReference guestbooksRef = FirebaseDatabaseInstance.getInstance().getFirebaseDatabase().getReference("Guestbooks");
-        guestbooksRef.orderByChild("isPublic").equalTo(true).addValueEventListener(new ValueEventListener() {
+        guestbooksRef.orderByChild("publicity").equalTo("Öffentlich").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                List<Guestbook> userGuestbooks = new ArrayList<>();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Guestbook guestbook = snapshot.getValue(Guestbook.class);
+                    userGuestbooks.add(guestbook);
+                }
+                guestbookAdapter = new GuestbookAdapter(getContext(), userGuestbooks);
+                recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                recyclerView.setAdapter(guestbookAdapter);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Handle error
+            }
+        });
+
+        guestbooksRef.orderByChild("publicity").equalTo("Geschlossen").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 List<Guestbook> userGuestbooks = new ArrayList<>();

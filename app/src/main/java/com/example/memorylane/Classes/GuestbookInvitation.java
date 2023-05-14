@@ -1,8 +1,12 @@
 package com.example.memorylane.Classes;
 
+import com.example.memorylane.Database.UserSession;
+
 import java.io.Serializable;
+import java.util.UUID;
 
 public class GuestbookInvitation implements Serializable {
+    private String invitationID;
     private String guestbookId;
     private String guestbookName;
     private String senderId;
@@ -12,14 +16,23 @@ public class GuestbookInvitation implements Serializable {
 
     public GuestbookInvitation() {}
 
-    public GuestbookInvitation(String guestbookId, String guestbookName, String senderId, String senderName, String recipientId, String recipientName) {
-        this.guestbookId = guestbookId;
-        this.guestbookName = guestbookName;
-        this.senderId = senderId;
-        this.senderName = senderName;
-        this.recipientId = recipientId;
-        this.recipientName = recipientName;
+    public GuestbookInvitation(Guestbook guestbook, UserSession userSender, User userReceiver) {
+        this.invitationID = UUID.randomUUID().toString();
+        this.guestbookId = guestbook.getId();
+        this.guestbookName = guestbook.getName();
+        this.senderId = userSender.getCurrentUser().getUid();
+        this.recipientId = userReceiver.getUserSessionID();
+        this.recipientName = userReceiver.getUsername();
     }
+
+    public String getInvitationID() {
+        return invitationID;
+    }
+
+    public void setInvitationID(String invitationID) {
+        this.invitationID = invitationID;
+    }
+
 
     public String getGuestbookId() {
         return guestbookId;

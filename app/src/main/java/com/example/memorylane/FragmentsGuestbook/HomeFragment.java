@@ -32,6 +32,7 @@ import com.example.memorylane.Classes.Guestbook;
 import com.example.memorylane.Classes.SliderItem;
 import com.example.memorylane.Classes.UploadedPicture;
 import com.example.memorylane.Database.FirebaseDatabaseInstance;
+import com.example.memorylane.Database.UserSession;
 import com.example.memorylane.GuestbookActivity;
 import com.example.memorylane.R;
 import com.example.memorylane.RequestsActivity;
@@ -82,7 +83,6 @@ public class HomeFragment extends Fragment {
         floatingActionButton = fragmentView.findViewById(R.id.requestsButton);
         iniCardView(fragmentView);
         initImageList(fragmentView);
-        floatingActionButton.setOnClickListener(v -> startActivity(new Intent(getActivity(), RequestsActivity.class)));
     }
 
 
@@ -154,6 +154,11 @@ private void iniCardView(View fragmentView) {
                 if (guestbook != null) {
                     Activity activity = getActivity();
                     if (isAdded() && activity != null) {
+                        if (UserSession.getInstance().getCurrentUser().getUid().equals(guestbook.getCreatorId())) {
+                            floatingActionButton.setVisibility(View.VISIBLE);
+                            floatingActionButton.setOnClickListener(v -> startActivity(new Intent(getActivity(), RequestsActivity.class)));
+                        } else floatingActionButton.setVisibility(View.INVISIBLE);
+
                         guestbookName.setText(guestbook.getName());
                         guestBookDescription.setText(guestbook.getDescription());
                         date.setText(guestbook.getDate());

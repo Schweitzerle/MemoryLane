@@ -13,19 +13,19 @@ public class Guestbook {
     public String creatorId;
     public String date;
     public List<String> members;
-    public boolean isPublic;
+    public String publicity;
 
     public Guestbook() {
         // Default constructor required for calls to DataSnapshot.getValue(Guestbook.class)
     }
 
-    public Guestbook(String id, String name, String pictureUrl, String description, String creatorId, String date, boolean isPublic) {
+    public Guestbook(String id, String name, String pictureUrl, String description, String creatorId, String date, String publicity) {
         this.id = id;
         this.name = name;
         this.pictureUrl = pictureUrl;
         this.description = description;
         this.creatorId = creatorId;
-        this.isPublic = isPublic;
+        this.publicity = publicity;
         this.date = date;
         this.members = new ArrayList<>();
     }
@@ -37,7 +37,7 @@ public class Guestbook {
         result.put("pictureUrl", pictureUrl);
         result.put("description", description);
         result.put("creatorId", creatorId);
-        result.put("isPublic", isPublic);
+        result.put("isPublic", publicity);
         result.put("date", date);
         return result;
     }
@@ -98,8 +98,12 @@ public class Guestbook {
         this.pictureUrl = pictureUrl;
     }
 
-    public void setPublic(boolean aPublic) {
-        isPublic = aPublic;
+    public void setPublic(String aPublic) {
+        publicity = aPublic;
+    }
+
+    public String getPublicity() {
+        return publicity;
     }
 }
 

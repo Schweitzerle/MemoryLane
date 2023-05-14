@@ -2,7 +2,6 @@ package com.example.memorylane.Classes;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -11,20 +10,19 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDialogFragment;
 
 import com.example.memorylane.Database.FirebaseDatabaseInstance;
-import com.example.memorylane.Database.UserSession;
 import com.google.firebase.database.DatabaseReference;
 
 
-public class RequestDecisionDialog extends AppCompatDialogFragment {
+public class InvitationDecisionDialog extends AppCompatDialogFragment {
 
     private final Context context;
-    private final GuestbookRequest guestbookRequest;
+    private final GuestbookInvitation guestbookInvitation;
 
 
     //Retrieves an ID of the matching diary entry, the EntryPictureAdapter and EntryPictureManager
-    public RequestDecisionDialog(Context context, GuestbookRequest guestbookRequest) {
+    public InvitationDecisionDialog(Context context, GuestbookInvitation guestbookInvitation) {
         this.context = context;
-        this.guestbookRequest = guestbookRequest;
+        this.guestbookInvitation = guestbookInvitation;
     }
 
 
@@ -40,9 +38,9 @@ public class RequestDecisionDialog extends AppCompatDialogFragment {
                 .setTitle("Beitrittsanfrage")
                 .setMessage("Anfrage für dieses Gästebuch annehmen?")
                 .setNegativeButton("Nein", (dialogInterface, i) -> {
-                    DatabaseReference databaseReference = FirebaseDatabaseInstance.getInstance().getFirebaseDatabase().getReference("Guestbooks");
-                    databaseReference.child(guestbookRequest.getGuestbookId()).child("joinRequests").child(guestbookRequest.getRequestID()).removeValue();
-                    Toast.makeText(context, "Anfrage abgelehnt", Toast.LENGTH_SHORT).show();
+                    DatabaseReference databaseReference = FirebaseDatabaseInstance.getInstance().getFirebaseDatabase().getReference("Users");
+                    databaseReference.child(guestbookInvitation.getRecipientId()).child("invitations").child(guestbookInvitation.getInvitationID()).removeValue();
+                    Toast.makeText(context, "Einladung abgelehnt", Toast.LENGTH_SHORT).show();
 
                     //TODO: Notification an User mit Ablehnung
 
@@ -51,9 +49,9 @@ public class RequestDecisionDialog extends AppCompatDialogFragment {
                     DatabaseReference databaseReference = FirebaseDatabaseInstance.getInstance().getFirebaseDatabase().getReference("Users");
                     DatabaseReference guestbookReference = FirebaseDatabaseInstance.getInstance().getFirebaseDatabase().getReference("Guestbooks");
 
-                    databaseReference.child(guestbookRequest.getSenderId()).child("MemberIn").child(guestbookRequest.getGuestbookId()).setValue(guestbookRequest.getGuestbookName());
-                    guestbookReference.child(guestbookRequest.getGuestbookId()).child("Members").child(guestbookRequest.getSenderId()).setValue(guestbookRequest.getSenderName());
-                    guestbookReference.child(guestbookRequest.getGuestbookId()).child("joinRequests").child(guestbookRequest.getRequestID()).removeValue();
+                    databaseReference.child(guestbookInvitation.getRecipientId()).child("MemberIn").child(guestbookInvitation.getGuestbookId()).setValue(guestbookInvitation.getGuestbookName());
+                    databaseReference.child(guestbookInvitation.getRecipientId()).child("invitations").child(guestbookInvitation.getInvitationID()).removeValue();
+                    guestbookReference.child(guestbookInvitation.getGuestbookId()).child("Members").child(guestbookInvitation.getRecipientId()).setValue(guestbookInvitation.getRecipientName());
 
                     Toast.makeText(context, "Anfrage angenommen", Toast.LENGTH_SHORT).show();
                 });

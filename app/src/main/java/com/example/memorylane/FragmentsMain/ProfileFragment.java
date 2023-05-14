@@ -9,15 +9,24 @@ import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.memorylane.Adapters.InvitationAdapter;
+import com.example.memorylane.Adapters.RequestAdapter;
+import com.example.memorylane.Classes.GuestbookInvitation;
+import com.example.memorylane.Classes.GuestbookRequest;
 import com.example.memorylane.Database.FirebaseDatabaseInstance;
 import com.example.memorylane.Database.UserSession;
+import com.example.memorylane.GuestbookActivity;
 import com.example.memorylane.LoginActivity;
 import com.example.memorylane.R;
+import com.example.memorylane.RequestsActivity;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.textview.MaterialTextView;
@@ -35,16 +44,15 @@ import io.github.muddz.styleabletoast.StyleableToast;
 
 public class ProfileFragment extends Fragment implements View.OnClickListener {
 
-    MaterialTextView setsOwned, setsFavored, bricksOwned, statusTextView, emailTextView;
+    MaterialTextView statusTextView, emailTextView, uidTextView;
     MaterialButton signOutButton;
     ShapeableImageView profileImage, signatureImage;
+    RecyclerView invitationRecycler;
+    InvitationAdapter invitationAdapter;
+
 
     String name = "";
-    int start = 0;
 
-    List<String> favoriteSetNames = new ArrayList<>();
-
-    List<Integer> mySetNamesList = new ArrayList<>();
 
 
     @Override
@@ -52,16 +60,13 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
+        invitationRecycler = view.findViewById(R.id.invitationRecycler);
 
-        initUI(view);
         if (UserSession.getInstance().getCurrentUser() != null) {
             initSignIn(view);
-            DatabaseReference favoritesRef = FirebaseDatabaseInstance.getInstance().getFirebaseDatabase().getReference("Users").child(UserSession.getInstance().getCurrentUser().getUid()).child("Favorites");
-            getFavorites(favoritesRef, favoriteSetNames);
-            DatabaseReference myRef = FirebaseDatabaseInstance.getInstance().getFirebaseDatabase().getReference("Users").child(UserSession.getInstance().getCurrentUser().getUid()).child("My_Sets");
-            getMySets(myRef, mySetNamesList);
             loadSignature();
             loadProfileImage();
+            retrieveGuestbookInvitations();
         }
 
         return view;
@@ -100,10 +105,30 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                     Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
                     // set the signature to the ImageView
                     profileImage.setImageBitmap(decodedByte);
-
                 }
-
             }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Handle error
+            }
+        });
+    }
+
+    private void retrieveGuestbookInvitations() {
+        DatabaseReference guestbooksRef = FirebaseDatabaseInstance.getInstance().getFirebaseDatabase().getReference("Users").child(UserSession.getInstance().getCurrentUser().getUid());
+        guestbooksRef.child("invitations").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                List<GuestbookInvitation> guestbookInvitations = new ArrayList<>();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    GuestbookInvitation guestbookInvitation = snapshot.getValue(GuestbookInvitation.class);
+                    guestbookInvitations.add(guestbookInvitation);
+                }
+                invitationAdapter = new InvitationAdapter(getContext(), guestbookInvitations);
+                invitationRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
+                invitationRecycler.setAdapter(invitationAdapter);
+            }
+
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 // Handle error
@@ -117,15 +142,11 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         statusTextView = view.findViewById(R.id.name_view);
         signOutButton = view.findViewById(R.id.sign_out_button);
         emailTextView = view.findViewById(R.id.email_text_view);
+        uidTextView = view.findViewById(R.id.uid_text_view);
 
         signatureImage.setOnClickListener(v -> openSignaturePad());
 
-
-        
-
         signOutButton.setOnClickListener(this);
-
-
 
         if (UserSession.getInstance().getCurrentUser() != null) {
             emailTextView.setText(UserSession.getInstance().getCurrentUser().getEmail());
@@ -136,6 +157,21 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                     String signature = dataSnapshot.getValue(String.class);
                     if (signature!= null) {
                         statusTextView.setText(signature);
+                    }
+
+                }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    // Handle error
+                }
+            });
+            DatabaseReference dataRef = FirebaseDatabaseInstance.getInstance().getFirebaseDatabase().getReference("Users").child(UserSession.getInstance().getCurrentUser().getUid()).child("shortUID");
+            dataRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    String signature = dataSnapshot.getValue(String.class);
+                    if (signature!= null) {
+                        uidTextView.setText("UID: " + signature);
                     }
 
                 }
@@ -155,102 +191,11 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         signaturePadFragment.show(getFragmentManager(), "SignaturePadFragment");
     }
 
-    private void getMySets(DatabaseReference myReference, final List<Integer> mySetNames) {
-        myReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                mySetNames.clear();
-                for (DataSnapshot legoSetSnapshot : dataSnapshot.getChildren()) {
-                    Integer legoSetName = legoSetSnapshot.child("Number_Of_Bricks").getValue(Integer.class);
-                    mySetNames.add(legoSetName);
-                }
-                initMyAnim(mySetNames);
-                initAnimators(mySetNames);
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // Handle error
-            }
-        });
-    }
 
-    private void initMyAnim(List<Integer> mySets) {
-        int endMy = mySets.size();
-        if (endMy != 0) {
-            ValueAnimator animatorMy = ValueAnimator.ofInt(start, endMy);
-            animatorMy.setDuration(1000);
-            animatorMy.addUpdateListener(animation -> {
-                int value = (int) animation.getAnimatedValue();
-                setsOwned.setText(String.valueOf(value));
-            });
-            animatorMy.start();
-        } else {
-            setsOwned.setText("0");
-        }
-    }
 
-    private void getFavorites(DatabaseReference favoritesRef, final List<String> favoriteSetNames) {
-        favoritesRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                favoriteSetNames.clear();
-                for (DataSnapshot legoSetSnapshot : dataSnapshot.getChildren()) {
-                    String legoSetName = legoSetSnapshot.child("Set_Number").getValue(String.class);
-                    favoriteSetNames.add(legoSetName);
 
-                }
-                initFavAnim(favoriteSetNames);
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // Handle error
-            }
-        });
-    }
-
-    private void initFavAnim(List<String> favoriteSetNames) {
-        int endFav = favoriteSetNames.size();
-        if (endFav != 0) {
-            ValueAnimator animatorFav = ValueAnimator.ofInt(start, endFav);
-            animatorFav.setDuration(1000);
-            animatorFav.addUpdateListener(animation -> {
-                int value = (int) animation.getAnimatedValue();
-                setsFavored.setText(String.valueOf(value));
-            });
-            animatorFav.start();
-        } else {
-            setsFavored.setText("0");
-        }
-
-    }
-
-    private void initAnimators(List<Integer> mySetBricks) {
-        int endBricks = 0;
-
-        for (Integer integer : mySetBricks) {
-            endBricks += integer;
-        }
-
-        if (endBricks != 0) {
-            ValueAnimator animatorBricks = ValueAnimator.ofInt(start, endBricks);
-            animatorBricks.setDuration(1000);
-            animatorBricks.addUpdateListener(animation -> {
-                int value = (int) animation.getAnimatedValue();
-                bricksOwned.setText(String.valueOf(value));
-            });
-            animatorBricks.start();
-        } else {
-            bricksOwned.setText("0");
-        }
-    }
-
-    private void initUI(View view) {
-        setsFavored = view.findViewById(R.id.sets_favored);
-        setsOwned = view.findViewById(R.id.sets_owned);
-        bricksOwned = view.findViewById(R.id.bricks_owned_in_sets);
-    }
 
 
     @Override

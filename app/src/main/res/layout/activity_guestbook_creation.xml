@@ -23,6 +23,8 @@
         app:layout_constraintTop_toTopOf="parent" />
 
 
+
+
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/guestbook_picture_input"
         android:layout_width="140dp"
@@ -94,18 +96,47 @@
     </com.google.android.material.textfield.TextInputLayout>
 
 
-    <com.google.android.material.switchmaterial.SwitchMaterial
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/guestbook_public_switch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
         android:layout_marginTop="10sp"
-        android:text="Soll das Gästebuch offen zugänglich sein?"
+        android:text="Wie soll das Gästebuch für andere zugänglich sein?"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/text_input_layout_email"
         app:switchPadding="20dp" />
+
+    <RadioGroup
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/guestbook_public_switch"
+        android:id="@+id/radioGroupStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/radioButtonPublic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Öffentlich" />
+
+        <RadioButton
+            android:id="@+id/radioButtonClosed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Geschlossen" />
+
+        <RadioButton
+            android:id="@+id/radioButtonPrivate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Privat" />
+    </RadioGroup>
+
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/confirm_button"
@@ -122,6 +153,6 @@
         app:backgroundTint="@null"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/guestbook_public_switch" />
+        app:layout_constraintTop_toBottomOf="@id/radioGroupStatus" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

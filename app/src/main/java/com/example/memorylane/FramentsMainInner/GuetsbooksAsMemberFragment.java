@@ -47,29 +47,52 @@ public class GuetsbooksAsMemberFragment extends Fragment {
     }
 
     private void retrieveUserGuestbooks() {
-        String userId = UserSession.getInstance().getCurrentUser().getUid(); // replace with the user ID you want to search for
+        DatabaseReference usersRef = FirebaseDatabaseInstance.getInstance().getFirebaseDatabase().getReference("Users");
+        String userId = UserSession.getInstance().getCurrentUser().getUid();
 
-        DatabaseReference databaseReference = FirebaseDatabaseInstance.getInstance().getFirebaseDatabase().getReference("Guestbooks");
-        Query query = databaseReference.orderByChild("Members/" + userId).equalTo(true);
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
+        // Get guestbook IDs stored in the MemberIn node
+        usersRef.child(userId).child("MemberIn").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                List<Guestbook> guestbooks = new ArrayList<>();
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    Guestbook guestbook = dataSnapshot.getValue(Guestbook.class);
-                    guestbooks.add(guestbook);
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                List<String> guestbookIds = new ArrayList<>();
+
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    String guestbookId = snapshot.getKey();
+                    guestbookIds.add(guestbookId);
                 }
-                Toast.makeText(getContext(), String.valueOf(guestbooks.size()), Toast.LENGTH_SHORT).show();
-                // Do something with the list of guestbooks where the user is a member
+
+                // Retrieve guestbooks for the IDs stored in MemberIn node
+                DatabaseReference guestbooksRef = FirebaseDatabaseInstance.getInstance().getFirebaseDatabase().getReference("Guestbooks");
+
+                guestbooksRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        List<Guestbook> memberGuestbooks = new ArrayList<>();
+
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            if (guestbookIds.contains(snapshot.getKey())) {
+                                Guestbook guestbook = snapshot.getValue(Guestbook.class);
+                                memberGuestbooks.add(guestbook);
+                            }
+                        }
+
+                        guestbookAdapter = new GuestbookAdapter(getContext(), memberGuestbooks);
+                        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                        recyclerView.setAdapter(guestbookAdapter);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        // Handle error
+                    }
+                });
             }
 
-
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+            public void onCancelled(@NonNull DatabaseError databaseError) {
                 // Handle error
             }
         });
-
-
     }
+
 }

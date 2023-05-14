@@ -114,7 +114,7 @@ public class UserActivity extends AppCompatActivity {
                     String signatureString = getStringFromImage(signature);
                     String profilePictureString = getStringFromImage(profilePictureImageView);
                     // Create a new instance of the User class and set the user's information
-                    user = new User(name, signatureString, age, profilePictureString);
+                    user = new User(name, signatureString, age, profilePictureString, UserSession.getInstance().getCurrentUser().getUid());
                     // Store the user's information in the database
                     storeUserInformation(user);
                     Intent intent = new Intent(getBaseContext(), MainActivity.class);

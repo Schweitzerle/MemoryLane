@@ -5,13 +5,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
-import com.example.memorylane.Adapters.GuestbookAdapter;
 import com.example.memorylane.Adapters.RequestAdapter;
-import com.example.memorylane.Classes.Guestbook;
 import com.example.memorylane.Classes.GuestbookRequest;
 import com.example.memorylane.Database.FirebaseDatabaseInstance;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -24,6 +25,7 @@ public class RequestsActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private RequestAdapter requestAdapter;
+    private FloatingActionButton sendInviteButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +35,8 @@ public class RequestsActivity extends AppCompatActivity {
     }
 
     private void initUI() {
+        sendInviteButton = findViewById(R.id.send_invitation_float_button);
+        sendInviteButton.setOnClickListener(view -> startActivity(new Intent(RequestsActivity.this, SendInvitationActivity.class)));
         recyclerView = findViewById(R.id.requestRecycler);
         retrieveGuestbookRequests();
     }
