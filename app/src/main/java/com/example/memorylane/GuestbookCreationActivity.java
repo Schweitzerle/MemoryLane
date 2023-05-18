@@ -7,11 +7,13 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -22,6 +24,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.memorylane.Classes.Guestbook;
 import com.example.memorylane.Database.FirebaseDatabaseInstance;
 import com.example.memorylane.Database.FirebaseStorageInstance;
@@ -41,7 +45,10 @@ import java.util.Calendar;
 import java.util.Objects;
 import java.util.UUID;
 
+import eightbitlab.com.blurview.BlurView;
+import eightbitlab.com.blurview.RenderScriptBlur;
 import io.github.muddz.styleabletoast.StyleableToast;
+import jp.wasabeef.blurry.Blurry;
 
 public class GuestbookCreationActivity extends AppCompatActivity {
 
@@ -58,6 +65,8 @@ public class GuestbookCreationActivity extends AppCompatActivity {
     DatabaseReference databaseReference;
     StorageReference storageReference;
     AnimationDrawable drawable;
+
+    BlurView blurry;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +89,8 @@ public class GuestbookCreationActivity extends AppCompatActivity {
         imageView = findViewById(R.id.guestbook_picture_input);
         imageView.setOnClickListener(this::choosePicture);
         createButton = findViewById(R.id.confirm_button);
+        blurry = findViewById(R.id.blurry);
+
         databaseReference = FirebaseDatabaseInstance.getInstance().getFirebaseDatabase().getReference("Guestbooks");
         storageReference = FirebaseStorageInstance.getInstance().getFirebaseDatabase().getReference("Guestbooks");
 
@@ -236,14 +247,20 @@ public class GuestbookCreationActivity extends AppCompatActivity {
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             // Update the ImageView
-            imageView.setImageBitmap(imageBitmap);
+            Glide.with(getApplicationContext())
+                            .load(imageBitmap)
+                    .apply(new RequestOptions().dontTransform())
+                                    .into(imageView);
 
         } else if (requestCode == REQUEST_SELECT_PICTURE && resultCode == RESULT_OK) {
             Uri selectedImage = data.getData();
             try {
                 Bitmap imageBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
                 // Update the ImageView
-                imageView.setImageBitmap(imageBitmap);
+                Glide.with(getApplicationContext())
+                        .load(imageBitmap)
+                        .apply(new RequestOptions().dontTransform())
+                        .into(imageView);
 
             } catch (IOException e) {
                 e.printStackTrace();

@@ -39,6 +39,7 @@ public class Guestbook {
         result.put("creatorId", creatorId);
         result.put("isPublic", publicity);
         result.put("date", date);
+        result.put("members", members);
         return result;
     }
 

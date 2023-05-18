@@ -13,10 +13,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bottom_corners_rounded"
-        android:padding="40dp"
+        android:padding="20dp"
         android:text="Erstelle dein Gästebuch Eintrag!"
         android:textAlignment="center"
-        android:textColor="?attr/colorOnSecondary"
         android:textSize="40dp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -26,10 +25,11 @@
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/guestbook_picture_input"
-        android:layout_width="140dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="200dp"
+        android:layout_marginTop="40dp"
         android:adjustViewBounds="true"
+        app:shapeAppearanceOverlay="@style/roundedImageView"
         android:contentDescription="Gästebuch Bild"
         android:scaleType="centerCrop"
         android:src="@drawable/brautpaar"
@@ -63,18 +63,15 @@
 
 
 
-
     <com.google.android.material.button.MaterialButton
         android:id="@+id/confirm_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
         android:layout_marginTop="70dp"
-        android:background="@drawable/rounded_corners_stroke"
         android:padding="20dp"
-        android:text="Gästebuch erstellen"
+        android:text="Gästebucheintrag erstellen"
         android:textAlignment="center"
-        android:textColor="?attr/colorOnSecondary"
         android:textSize="20dp"
         android:textStyle="bold"
         app:backgroundTint="@null"

@@ -25,6 +25,7 @@ import androidx.palette.graphics.Palette;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.example.memorylane.Classes.ColorPaletteUtils;
 import com.example.memorylane.Classes.Guestbook;
 import com.example.memorylane.Database.FirebaseDatabaseInstance;
 import com.example.memorylane.FragmentsGuestbook.GalleryFragment;
@@ -50,8 +51,6 @@ public class GuestbookActivity extends AppCompatActivity {
     AnimationDrawable animationDrawable;
     ConstraintLayout constraintLayout;
 
-    public static Palette.Swatch vibrantSwatch, lightVibrantSwatch, darkVibrantSwatch, mutedSwatch, lightMutedSwatch, darkMutedSwatch;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +63,6 @@ public class GuestbookActivity extends AppCompatActivity {
     }
 
 
-
     private void getColorPaletteFromGBPicture(Guestbook guestbook) {
 
         Glide.with(getBaseContext())
@@ -75,34 +73,34 @@ public class GuestbookActivity extends AppCompatActivity {
                     public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
                         // do something with the Bitmap
                         Palette.from(resource).maximumColorCount(32).generate(palette -> {
-                            vibrantSwatch = palette.getVibrantSwatch();
-                            lightVibrantSwatch = palette.getLightVibrantSwatch();
-                            darkVibrantSwatch = palette.getDarkVibrantSwatch();
-                            mutedSwatch = palette.getMutedSwatch();
-                            lightMutedSwatch = palette.getLightMutedSwatch();
-                            darkMutedSwatch = palette.getDarkMutedSwatch();
-                            if (vibrantSwatch != null) {
+                            ColorPaletteUtils.vibrantSwatch = palette.getVibrantSwatch();
+                            ColorPaletteUtils.lightVibrantSwatch = palette.getLightVibrantSwatch();
+                            ColorPaletteUtils.darkVibrantSwatch = palette.getDarkVibrantSwatch();
+                            ColorPaletteUtils.mutedSwatch = palette.getMutedSwatch();
+                            ColorPaletteUtils.lightMutedSwatch = palette.getLightMutedSwatch();
+                            ColorPaletteUtils.darkMutedSwatch = palette.getDarkMutedSwatch();
+                            if (ColorPaletteUtils.vibrantSwatch != null) {
                                 // Inflate the shape drawable from the XML file
                                 GradientDrawable shapeDrawable = (GradientDrawable) ContextCompat.getDrawable(getBaseContext(), R.drawable.round_corners_secondary);
                                 // Set a new color for the shape drawable
-                                shapeDrawable.setColor(darkVibrantSwatch.getRgb());
+                                shapeDrawable.setColor(ColorPaletteUtils.darkVibrantSwatch.getRgb());
                                 // Set the new shape drawable as the background of a view
                                 bottomNavigationView.setBackground(shapeDrawable);
 
 
                                 // Modify the start and end colors of anim1
 
-                                    GradientDrawable gradientDrawable = new GradientDrawable();
-                                    gradientDrawable.setColors(new int[]{vibrantSwatch.getRgb(),lightVibrantSwatch.getRgb()});
+                                GradientDrawable gradientDrawable = new GradientDrawable();
+                                gradientDrawable.setColors(new int[]{ColorPaletteUtils.lightVibrantSwatch.getRgb(), ColorPaletteUtils.lightMutedSwatch.getRgb()});
 
 
                                 // Modify the start and end colors of anim2
-                                    GradientDrawable gradientDrawable2 = new GradientDrawable();
-                                    gradientDrawable2.setColors(new int[]{darkVibrantSwatch.getRgb(), vibrantSwatch.getRgb()});
+                                GradientDrawable gradientDrawable2 = new GradientDrawable();
+                                gradientDrawable2.setColors(new int[]{ColorPaletteUtils.vibrantSwatch.getRgb(), ColorPaletteUtils.darkMutedSwatch.getRgb()});
 
                                 // Modify the start and end colors of anim3
-                                    GradientDrawable gradientDrawable1 = new GradientDrawable();
-                                    gradientDrawable1.setColors(new int[]{darkMutedSwatch.getRgb(), lightVibrantSwatch.getRgb()});
+                                GradientDrawable gradientDrawable1 = new GradientDrawable();
+                                gradientDrawable1.setColors(new int[]{ColorPaletteUtils.mutedSwatch.getRgb(), ColorPaletteUtils.darkVibrantSwatch.getRgb()});
 
                                 // Set the modified drawable resources as the background of the ConstraintLayout
                                 constraintLayout = findViewById(R.id.main_container);
@@ -121,7 +119,7 @@ public class GuestbookActivity extends AppCompatActivity {
                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                                     Window window = getWindow();
                                     window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-                                    window.setStatusBarColor(darkVibrantSwatch.getRgb());
+                                    window.setStatusBarColor(ColorPaletteUtils.darkVibrantSwatch.getRgb());
                                 }
                             }
                         });
@@ -129,6 +127,7 @@ public class GuestbookActivity extends AppCompatActivity {
                 });
 
     }
+
 
     private void initUI() {
 

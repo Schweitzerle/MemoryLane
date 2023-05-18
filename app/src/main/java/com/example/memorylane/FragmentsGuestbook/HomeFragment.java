@@ -56,7 +56,7 @@ public class HomeFragment extends Fragment {
 
     private ViewPager2 viewPager2;
     private Handler sliderHandler = new Handler();
-    private MaterialTextView guestbookName, guestBookDescription, amountOfPictures, amountOfEntries, date;
+    private MaterialTextView guestbookName, guestBookDescription, amountOfPictures, amountOfEntries, date, amountOfMembers;
     private ShapeableImageView guestBookImage;
     private FloatingActionButton floatingActionButton;
     private Palette.Swatch vibrantSwatch, lightVibrantSwatch, darkVibrantSwatch, mutedSwatch, lightMutedSwatch, darkMutedSwatch;
@@ -78,7 +78,8 @@ public class HomeFragment extends Fragment {
         guestbookName = fragmentView.findViewById(R.id.guest_name);
         guestBookDescription = fragmentView.findViewById(R.id.guestbook_description);
         amountOfEntries = fragmentView.findViewById(R.id.guestbook_entry_amount);
-        date = fragmentView.findViewById(R.id.guestbook_member_amount);
+        amountOfMembers = fragmentView.findViewById(R.id.guestbook_members_amount);
+        date = fragmentView.findViewById(R.id.guestbook_date);
         amountOfPictures = fragmentView.findViewById(R.id.guestbook_picture_amount);
         floatingActionButton = fragmentView.findViewById(R.id.requestsButton);
         iniCardView(fragmentView);
@@ -86,9 +87,7 @@ public class HomeFragment extends Fragment {
     }
 
 
-
-    private void initNumberAnimMembers(View view, int end) {
-        MaterialTextView member = view.findViewById(R.id.guestbook_member_amount);
+    private void initNumberAnim(String prefix, MaterialTextView materialTextView,int end) {
         int start = 0;
         int endBricks = end;
 
@@ -98,49 +97,15 @@ public class HomeFragment extends Fragment {
             animatorBricks.setDuration(1000);
             animatorBricks.addUpdateListener(animation -> {
                 int value = (int) animation.getAnimatedValue();
-                member.setText(String.valueOf(value));
+                materialTextView.setText(prefix + String.valueOf(value));
             });
             animatorBricks.start();
         } else {
-            member.setText("0");
+            materialTextView.setText("0");
         }
     }
 
-    private void initNumberAnimPictures(int end) {
-        int start = 0;
-        int endBricks = end;
 
-
-        if (endBricks != 0) {
-            ValueAnimator animatorBricks = ValueAnimator.ofInt(start, endBricks);
-            animatorBricks.setDuration(1000);
-            animatorBricks.addUpdateListener(animation -> {
-                int value = (int) animation.getAnimatedValue();
-                amountOfPictures.setText(String.valueOf(value));
-            });
-            animatorBricks.start();
-        } else {
-            amountOfPictures.setText("0");
-        }
-    }
-
-    private void initNumberAnimEntries(int end) {
-        int start = 0;
-        int endBricks = end;
-
-
-        if (endBricks != 0) {
-            ValueAnimator animatorBricks = ValueAnimator.ofInt(start, endBricks);
-            animatorBricks.setDuration(1000);
-            animatorBricks.addUpdateListener(animation -> {
-                int value = (int) animation.getAnimatedValue();
-                amountOfEntries.setText(String.valueOf(value));
-            });
-            animatorBricks.start();
-        } else {
-            amountOfEntries.setText("0");
-        }
-    }
 
 
 
@@ -203,8 +168,8 @@ private void iniCardView(View fragmentView) {
                     UploadedPicture uploadedPicture = snapshot.getValue(UploadedPicture.class);
                     uploadedPictures.add(uploadedPicture);
                 }
-                amountOfPictures.setText("Erinnerungen: " + uploadedPictures.size());
-                initNumberAnimPictures(uploadedPictures.size());
+                //amountOfPictures.setText("Erinnerungen: " + uploadedPictures.size());
+                initNumberAnim("Erinnerungen: ", amountOfPictures, uploadedPictures.size());
             }
 
             @Override
@@ -221,8 +186,8 @@ private void iniCardView(View fragmentView) {
                     GuestEntry guestEntry = snapshot.getValue(GuestEntry.class);
                     guestEntries.add(guestEntry);
                 }
-                amountOfEntries.setText("Gästeeinträge: " + guestEntries.size());
-                initNumberAnimEntries(guestEntries.size());
+                //amountOfEntries.setText("Gästeeinträge: " + guestEntries.size());
+                initNumberAnim("Gästeeinträge: ", amountOfEntries, guestEntries.size());
             }
 
             @Override
@@ -230,6 +195,24 @@ private void iniCardView(View fragmentView) {
                 // Handle error
             }
         });
+
+    guestbooksRef.child(GuestbookActivity.guestbookID).child("Members").addValueEventListener(new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            List<String> guestEntries = new ArrayList<>();
+            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                String guestEntry = snapshot.getValue(String.class);
+                guestEntries.add(guestEntry);
+            }
+            //amountOfMembers.setText("Gästeeinträge: " + guestEntries.size());
+            initNumberAnim("Mitglieder: ", amountOfMembers, guestEntries.size());
+        }
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+            // Handle error
+        }
+    });
     }
 
 

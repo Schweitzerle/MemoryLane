@@ -15,11 +15,17 @@ import com.bumptech.glide.Glide;
 import com.example.memorylane.Classes.DeleteDialogGuestbook;
 import com.example.memorylane.Classes.Guestbook;
 import com.example.memorylane.Classes.JoinGuestbookDialog;
+import com.example.memorylane.Classes.User;
+import com.example.memorylane.Database.FirebaseDatabaseInstance;
 import com.example.memorylane.Database.UserSession;
 import com.example.memorylane.GuestbookActivity;
 import com.example.memorylane.R;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.textview.MaterialTextView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
 
@@ -51,25 +57,63 @@ public class GuestbookAdapter extends RecyclerView.Adapter<GuestbookAdapter.View
         Guestbook guestbook = mGuestbooks.get(position);
         holder.bind(guestbook);
 
-        holder.itemView.setOnClickListener(v -> {
-            Intent intent = new Intent(v.getContext(), GuestbookActivity.class);
-            intent.putExtra(GuestbookActivity.GUESTBOOK_KEY, guestbook.getId());
-            v.getContext().startActivity(intent);
-        });
+        DatabaseReference guestbooksRef = FirebaseDatabaseInstance.getInstance().getFirebaseDatabase().getReference("Guestbooks");
+        guestbooksRef.child(guestbook.getId()).child("Members").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                boolean isMember = false;
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    String memberId = snapshot.getKey();
+                    if (memberId != null && (memberId.equals(UserSession.getInstance().getCurrentUser().getUid()))) {
+                        isMember = true;
+                        break;
+                    }
+                }
 
-        holder.itemView.setOnLongClickListener(v -> {
-            if (UserSession.getInstance().getCurrentUser().getUid().equals(guestbook.getCreatorId())) {
-                DeleteDialogGuestbook deleteDialogGuestbook = new DeleteDialogGuestbook(context, guestbook);
-                deleteDialogGuestbook.show(((AppCompatActivity) context).getSupportFragmentManager(), "Entfernen");
-                return false;
-            } else {
-                JoinGuestbookDialog joinGuestbookDialog = new JoinGuestbookDialog(context, guestbook);
-                joinGuestbookDialog.show(((AppCompatActivity) context).getSupportFragmentManager(), "Anfragen");
-                Toast.makeText(context, "Nur eigene Gästebücher sind bearbeitbar", Toast.LENGTH_SHORT).show();
-                return true;
+                boolean isCreator = UserSession.getInstance().getCurrentUser().getUid().equals(guestbook.creatorId);
+
+                holder.itemView.setClickable(isMember || isCreator);
+                holder.itemView.setOnClickListener(isMember || isCreator? v -> {
+                    Intent intent = new Intent(v.getContext(), GuestbookActivity.class);
+                    intent.putExtra(GuestbookActivity.GUESTBOOK_KEY, guestbook.getId());
+                    v.getContext().startActivity(intent);
+                } : null);
+
+
+                boolean finalIsMember = isMember;
+                holder.itemView.setOnLongClickListener(v -> {
+                    if (UserSession.getInstance().getCurrentUser().getUid().equals(guestbook.getCreatorId())) {
+                        DeleteDialogGuestbook deleteDialogGuestbook = new DeleteDialogGuestbook(context, guestbook);
+                        deleteDialogGuestbook.show(((AppCompatActivity) context).getSupportFragmentManager(), "Entfernen");
+                        return false;
+                    } else if (!finalIsMember){
+                        DatabaseReference favoritesRef = FirebaseDatabaseInstance.getInstance().getFirebaseDatabase().getReference("Users").child(UserSession.getInstance().getCurrentUser().getUid());
+                        favoritesRef.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                User userSender = dataSnapshot.getValue(User.class);
+                                JoinGuestbookDialog joinGuestbookDialog = new JoinGuestbookDialog(context, guestbook, userSender);
+                                joinGuestbookDialog.show(((AppCompatActivity) context).getSupportFragmentManager(), "Anfragen");
+                            }
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                                // Handle error
+                            }
+                        });
+
+                    }
+                    return true;
+                });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
             }
         });
     }
+
+
 
     @Override
     public int getItemCount() {

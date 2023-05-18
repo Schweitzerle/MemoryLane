@@ -18,12 +18,12 @@ public class GuestbookRequest implements Serializable {
     public GuestbookRequest() {
     }
 
-    public GuestbookRequest(UserSession userSession, Guestbook guestbook) {
+    public GuestbookRequest(UserSession userSession, Guestbook guestbook, User userSender) {
         this.requestID = UUID.randomUUID().toString();
         this.guestbookId = guestbook.getId();
         this.guestbookName = guestbook.getName();
         this.senderId = userSession.getCurrentUser().getUid();
-        this.senderName = userSession.getCurrentUser().getDisplayName();
+        this.senderName = userSender.getUsername();
         this.recipientId = guestbook.getCreatorId();
     }
 

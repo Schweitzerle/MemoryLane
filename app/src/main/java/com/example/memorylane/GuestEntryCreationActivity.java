@@ -6,17 +6,23 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 
+import com.example.memorylane.Classes.ColorPaletteUtils;
 import com.example.memorylane.Classes.GuestEntry;
 import com.example.memorylane.Database.FirebaseDatabaseInstance;
 import com.example.memorylane.Database.FirebaseStorageInstance;
@@ -27,6 +33,7 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -53,6 +60,10 @@ public class GuestEntryCreationActivity extends AppCompatActivity {
     StorageReference storageReference;
     AnimationDrawable drawable;
 
+    ConstraintLayout constraintLayout;
+    AnimationDrawable animationDrawable;
+    MaterialTextView header;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,11 +72,6 @@ public class GuestEntryCreationActivity extends AppCompatActivity {
     }
 
     private void initUI() {
-        ConstraintLayout constraintLayout = findViewById(R.id.constraint_layout);
-        drawable = (AnimationDrawable) constraintLayout.getBackground();
-        drawable.setEnterFadeDuration(2500);
-        drawable.setExitFadeDuration(5000);
-        drawable.start();
         progressDialog = new ProgressDialog(GuestEntryCreationActivity.this);
         switchMaterial = findViewById(R.id.guestbook_public_switch);
         description = findViewById(R.id.email);
@@ -76,6 +82,7 @@ public class GuestEntryCreationActivity extends AppCompatActivity {
         String guestbookID = bundle.getString(GUESTBOOK_ID_KEY);
         databaseReference = FirebaseDatabaseInstance.getInstance().getFirebaseDatabase().getReference("Guestbooks").child(guestbookID).child("guestEntries");
         storageReference = FirebaseStorageInstance.getInstance().getFirebaseDatabase().getReference("Guestbooks").child(guestbookID).child("guestEntries");
+        getColorPaletteFromGBPicture();
 
 
         createButton.setOnClickListener(new View.OnClickListener() {
@@ -102,6 +109,59 @@ public class GuestEntryCreationActivity extends AppCompatActivity {
         });
 
     }
+
+    private void getColorPaletteFromGBPicture() {
+
+
+
+        if (ColorPaletteUtils.vibrantSwatch != null) {
+            // Inflate the shape drawable from the XML file
+            GradientDrawable shapeDrawable = (GradientDrawable) ContextCompat.getDrawable(getBaseContext(), R.drawable.bottom_corners_rounded);
+            // Set a new color for the shape drawable
+            shapeDrawable.setColor(ColorPaletteUtils.darkVibrantSwatch.getRgb());
+            shapeDrawable.setPadding(20,20,20,20);
+
+            // Set the new shape drawable as the background of a view
+
+            createButton.setBackgroundColor(ColorPaletteUtils.darkVibrantSwatch.getRgb());
+            header = findViewById(R.id.register_text);
+            // Set a new color for the shape drawable
+            header.setBackground(shapeDrawable);
+            // Modify the start and end colors of anim1
+
+            GradientDrawable gradientDrawable = new GradientDrawable();
+            gradientDrawable.setColors(new int[]{ColorPaletteUtils.lightVibrantSwatch.getRgb(),ColorPaletteUtils.lightMutedSwatch.getRgb()});
+
+
+            // Modify the start and end colors of anim2
+            GradientDrawable gradientDrawable2 = new GradientDrawable();
+            gradientDrawable2.setColors(new int[]{ColorPaletteUtils.vibrantSwatch.getRgb(), ColorPaletteUtils.darkMutedSwatch.getRgb()});
+
+            // Modify the start and end colors of anim3
+            GradientDrawable gradientDrawable1 = new GradientDrawable();
+            gradientDrawable1.setColors(new int[]{ColorPaletteUtils.mutedSwatch.getRgb(), ColorPaletteUtils.darkVibrantSwatch.getRgb()});
+            // Set the modified drawable resources as the background of the ConstraintLayout
+            constraintLayout = findViewById(R.id.constraint_layout);
+            animationDrawable = new AnimationDrawable();
+            animationDrawable.addFrame(gradientDrawable, 5000);
+            animationDrawable.addFrame(gradientDrawable2, 5000);
+            animationDrawable.addFrame(gradientDrawable1, 5000);
+            constraintLayout.setBackground(animationDrawable);
+
+            // Start the animation
+            animationDrawable.setEnterFadeDuration(2000);
+            animationDrawable.setExitFadeDuration(2000);
+            animationDrawable.start();
+
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                Window window = getWindow();
+                window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+                window.setStatusBarColor(ColorPaletteUtils.darkVibrantSwatch.getRgb());
+            }
+        }
+    }
+
 
 
     private String getStringFromImage(ShapeableImageView view) {
@@ -216,9 +276,4 @@ public class GuestEntryCreationActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        drawable.stop();
-    }
 }

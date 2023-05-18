@@ -26,11 +26,14 @@ public class JoinGuestbookDialog extends AppCompatDialogFragment {
     private final Context context;
     private final Guestbook guestbook;
 
+    private final User userSender;
+
 
     //Retrieves an ID of the matching diary entry, the EntryPictureAdapter and EntryPictureManager
-    public JoinGuestbookDialog(Context context, Guestbook guestbook) {
+    public JoinGuestbookDialog(Context context, Guestbook guestbook, User userSender) {
         this.context = context;
         this.guestbook = guestbook;
+        this.userSender = userSender;
     }
 
 
@@ -57,7 +60,7 @@ public class JoinGuestbookDialog extends AppCompatDialogFragment {
 
     private void sendJoinRequest(String guestbookId, String guestbookOwnerId) {
         // Create a new join request
-        GuestbookRequest joinRequest = new GuestbookRequest(UserSession.getInstance(), guestbook);
+        GuestbookRequest joinRequest = new GuestbookRequest(UserSession.getInstance(), guestbook, userSender);
 
         // Save the join request to the database
        FirebaseDatabaseInstance.getInstance().getFirebaseDatabase().getReference().child("Guestbooks").child(guestbookId).child("joinRequests").child(joinRequest.getRequestID()).setValue(joinRequest);
